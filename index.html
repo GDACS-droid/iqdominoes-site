@@ -3,37 +3,164 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>IQ Dominoes</title>
+  <title>IQ Dominoes — Cuban Dominoes Online, Free Multiplayer</title>
+  <meta name="description" content="Play IQ Dominoes free: authentic Cuban double-nine dominoes online. 1v1, 2v2 teams, free-for-all, or solo vs CPU. No ads during play, no real-money wagers." />
+  <meta name="keywords" content="IQ Dominoes, Cuban dominoes, dominoes online, double nine dominoes, multiplayer dominoes, play dominoes with friends, free dominoes game, dominó cubano" />
+  <meta name="author" content="Global Data and Consulting Solutions, LLC" />
+  <meta name="theme-color" content="#0f3d1a" />
+
+  <link rel="canonical" href="https://www.iqdominoes.com/" />
+  <link rel="alternate" hreflang="en" href="https://www.iqdominoes.com/" />
+  <link rel="alternate" hreflang="es" href="https://www.iqdominoes.com/es/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="IQ Dominoes" />
+  <meta property="og:title" content="IQ Dominoes — Cuban Dominoes Online, Free Multiplayer" />
+  <meta property="og:description" content="Authentic Cuban double-nine dominoes online. 1v1, 2v2 teams, free-for-all, or solo vs CPU. Free. No ads during play." />
+  <meta property="og:url" content="https://www.iqdominoes.com/" />
+  <meta property="og:image" content="https://www.iqdominoes.com/assets/og-image.png" />
+  <meta property="og:image:alt" content="IQ Dominoes — Cuban dominoes online" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="es_ES" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="IQ Dominoes — Cuban Dominoes Online, Free Multiplayer" />
+  <meta name="twitter:description" content="Authentic Cuban double-nine dominoes online. 1v1, 2v2 teams, free-for-all, or solo vs CPU. Free." />
+  <meta name="twitter:image" content="https://www.iqdominoes.com/assets/og-image.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "IQ Dominoes",
+    "description": "Authentic Cuban double-nine dominoes online. Play 1v1, 2v2 teams, 4-player free-for-all, or solo against CPUs. Free, no ads during play, no real-money wagers.",
+    "applicationCategory": "GameApplication",
+    "applicationSubCategory": "Board Game",
+    "operatingSystem": "iOS",
+    "url": "https://www.iqdominoes.com/",
+    "downloadUrl": "https://apps.apple.com/app/id6759262289",
+    "installUrl": "https://apps.apple.com/app/id6759262289",
+    "inLanguage": ["en", "es"],
+    "publisher": {
+      "@type": "Organization",
+      "name": "Global Data and Consulting Solutions, LLC",
+      "url": "https://www.iqdominoes.com/"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
   <style>
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:#0f3d1a;color:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:#0f3d1a;color:#fff;line-height:1.55}
     .wrap{max-width:900px;margin:0 auto;padding:48px 20px}
     a{color:#D4AF37;text-decoration:none}
     a:hover{text-decoration:underline}
+    h1{font-size:2.6rem;margin:0 0 8px;letter-spacing:-0.5px}
+    h2{font-size:1.5rem;margin:0 0 12px}
+    h3{font-size:1.1rem;margin:0 0 6px}
+    p{margin:0 0 10px}
+    .lede{font-size:1.15rem;color:rgba(255,255,255,0.9);margin-top:6px;max-width:640px}
     .card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px 18px;margin-top:16px}
     .muted{color:rgba(255,255,255,0.75)}
-    .btn{display:inline-block;margin-top:14px;background:#D4AF37;color:#1a1a1a;padding:10px 14px;border-radius:10px;font-weight:700}
+    .btn{display:inline-block;margin-top:14px;background:#D4AF37;color:#1a1a1a;padding:12px 18px;border-radius:10px;font-weight:700}
+    .btn:hover{text-decoration:none;filter:brightness(1.05)}
+    .btn-row{margin-top:18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    .btn-secondary{display:inline-block;color:rgba(255,255,255,0.85);padding:12px 18px;border:1px solid rgba(255,255,255,0.25);border-radius:10px;font-weight:600}
+    .tertiary{display:inline-block;color:#D4AF37;margin-top:6px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+    .feature{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px}
+    .feature h3{display:flex;align-items:baseline;gap:8px}
+    .emoji{font-size:1.4rem;line-height:1}
+    .strip{margin-top:28px;text-align:center}
+    .story{margin-top:24px;font-size:1.05rem;color:rgba(255,255,255,0.9)}
+    footer{margin-top:48px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);font-size:0.95rem}
+    footer nav{margin-bottom:10px}
+    footer nav a{margin-right:14px;display:inline-block;margin-bottom:6px}
+    @media (max-width:600px){
+      .wrap{padding:32px 16px}
+      h1{font-size:2.1rem}
+      .grid{grid-template-columns:1fr}
+      .btn-row{flex-direction:column;align-items:flex-start}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>IQ Dominoes</h1>
-    <p class="muted">Classic dominoes on a clean green felt table. Offline play against CPUs.</p>
+    <main>
+      <header>
+        <h1>IQ Dominoes</h1>
+        <p class="lede">Cuban dominoes done right. Play 1v1, partner up, or free-for-all — free, online, no ads during play.</p>
+        <div class="btn-row">
+          <a class="btn" href="https://apps.apple.com/app/id6759262289" aria-label="Download IQ Dominoes on the App Store">Download on the App Store</a>
+          <span class="btn-secondary" aria-disabled="true">Coming soon to Google Play</span>
+        </div>
+        <a class="tertiary" href="/features/">Read about features →</a>
+      </header>
 
-    <div class="card">
-      <h2>Support</h2>
-      <p class="muted">Need help or want to report a bug?</p>
-      <a class="btn" href="/support">Go to Support</a>
-    </div>
+      <section aria-labelledby="features-heading">
+        <h2 id="features-heading" style="margin-top:36px">Why players come back</h2>
+        <div class="grid">
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">🎴</span> Authentic double-nine play</h3>
+            <p class="muted">All 55 tiles, real Cuban rules. Capicúa scores extra, shutouts (zapato) pay double — the way Tío taught it.</p>
+          </article>
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">👥</span> True multiplayer</h3>
+            <p class="muted">1v1, 2v2 teams, 4-player free-for-all, or solo against CPU opponents on three difficulty levels.</p>
+          </article>
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">📤</span> Share your wins</h3>
+            <p class="muted">Post-match recap images go straight to WhatsApp, Instagram, or Messages. Brag responsibly.</p>
+          </article>
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">🔥</span> Live emoji reactions</h3>
+            <p class="muted">React mid-game with a curated set of six emojis. No open chat, no harassment — just table talk.</p>
+          </article>
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">🎯</span> Daily Challenge + streaks</h3>
+            <p class="muted">Beat one seeded game every day. Track your days-played streak and keep the run alive.</p>
+          </article>
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">🔒</span> Privacy-first</h3>
+            <p class="muted">No ads during play, no real-money wagers, no pay-to-win. In-app opt-out for analytics, block/report on every player.</p>
+          </article>
+        </div>
+      </section>
 
-    <div class="card">
-      <h2>Privacy</h2>
-      <p class="muted">Read our privacy policy.</p>
-      <a class="btn" href="/privacy">View Privacy Policy</a>
-    </div>
+      <section class="card strip" aria-labelledby="howto-heading">
+        <h2 id="howto-heading">New to dominó cubano?</h2>
+        <p class="muted">Learn the rules, the scoring, and the table etiquette — capicúa, dual-end, shutouts, all of it.</p>
+        <a class="btn" href="/how-to-play/">How to play dominoes →</a>
+      </section>
 
-    <p class="muted" style="margin-top:24px;">
-      Contact: <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a>
-    </p>
+      <section class="card" aria-labelledby="story-heading">
+        <h2 id="story-heading">Stories from the table</h2>
+        <p class="story">Built for the table where Tío teaches the niños how to count pips. Designed by Cuban-American developers for the diaspora and anyone who loves the click of a tile hitting wood.</p>
+      </section>
+    </main>
+
+    <footer>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/features/">Features</a>
+        <a href="/how-to-play/">How to Play</a>
+        <a href="/about/">About</a>
+        <a href="https://apps.apple.com/app/id6759262289">Download</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/support">Support</a>
+        <a href="/es/" hreflang="es">Español</a>
+      </nav>
+      <p class="muted">© 2026 Global Data and Consulting Solutions, LLC. IQ Dominoes is a product of GDACS, registered in Florida.</p>
+      <p class="muted">Contact: <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a></p>
+    </footer>
   </div>
 </body>
 </html>

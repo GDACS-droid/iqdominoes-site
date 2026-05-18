@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.iqdominoes.com/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.iqdominoes.com/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.iqdominoes.com/es/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/" />
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/features/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/how-to-play/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/download/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/about/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/support/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/press/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/privacy/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.iqdominoes.com/privacy/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.iqdominoes.com/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/privacy/" />
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/terms/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.iqdominoes.com/terms/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.iqdominoes.com/es/terms/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/terms/" />
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/es/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.iqdominoes.com/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.iqdominoes.com/es/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/" />
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/es/privacy/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.iqdominoes.com/privacy/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.iqdominoes.com/es/privacy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/privacy/" />
+  </url>
+  <url>
+    <loc>https://www.iqdominoes.com/es/terms/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.iqdominoes.com/terms/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.iqdominoes.com/es/terms/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/terms/" />
+  </url>
+</urlset>

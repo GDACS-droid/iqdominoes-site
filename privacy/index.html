@@ -4,6 +4,26 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Privacy Policy | IQ Dominoes</title>
+  <meta name="description" content="IQ Dominoes Privacy Policy. What data the app collects, why, and how it is handled. No real-money wagers, no ads during play." />
+  <meta name="keywords" content="iq dominoes privacy, dominoes privacy policy, gdacs games privacy" />
+  <meta name="theme-color" content="#0f3d1a" />
+  <link rel="canonical" href="https://www.iqdominoes.com/privacy/" />
+  <link rel="alternate" hreflang="en" href="https://www.iqdominoes.com/privacy/" />
+  <link rel="alternate" hreflang="es" href="https://www.iqdominoes.com/es/privacy/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/privacy/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="IQ Dominoes" />
+  <meta property="og:title" content="Privacy Policy | IQ Dominoes" />
+  <meta property="og:description" content="What data IQ Dominoes collects, why, and how it is handled. Updated 2026-05-18." />
+  <meta property="og:url" content="https://www.iqdominoes.com/privacy/" />
+  <meta property="og:image" content="https://www.iqdominoes.com/assets/og-image.png" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="es_ES" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Privacy Policy | IQ Dominoes" />
+  <meta name="twitter:description" content="What data IQ Dominoes collects, why, and how it is handled." />
+  <meta name="twitter:image" content="https://www.iqdominoes.com/assets/og-image.png" />
   <style>
     body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:#0f3d1a;color:#fff}
     .wrap{max-width:900px;margin:0 auto;padding:48px 20px}
@@ -12,38 +32,68 @@
     h1,h2{margin:0 0 12px}
     p,li{line-height:1.5}
     .card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px 18px;margin-top:16px}
+    code{background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:0.9em}
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>Privacy Policy</h1>
-    <p class="muted">Last updated: <span id="d"></span></p>
+    <p class="muted">Last updated: 2026-05-18</p>
 
     <div class="card">
-      <h2>Summary</h2>
-      <p>IQ Dominoes does not collect, store, or sell personal information.</p>
+      <p>Global Data and Consulting Solutions, LLC ("GDACS", "we") publishes the IQ Dominoes mobile application ("the App"). This policy explains what data the App collects, why, and how it is handled.</p>
     </div>
 
     <div class="card">
       <h2>Data We Collect</h2>
-      <p>We do not collect personal data such as names, emails, device identifiers, location, contacts, or financial information.</p>
+      <p><strong>Display name.</strong> You enter a display name to appear on the game board to other players. This is stored locally on your device and on our multiplayer server only while you are in an active match. It is not linked to any personal identity.</p>
+      <p><strong>Device identifiers.</strong> When you play online, our server assigns a temporary session identifier (Socket.io socket ID) to coordinate the match between players. This identifier is ephemeral and is discarded when you disconnect.</p>
+      <p><strong>App interaction events.</strong> We use PostHog (<a href="https://posthog.com">posthog.com</a>) to collect anonymous analytics about which screens you visit and what game modes you choose. These events are not linked to your real identity. You can opt out in-app via Settings &rarr; Analytics &amp; Crash Reports toggle.</p>
+      <p><strong>Opponent records (on-device only).</strong> To show your win/loss history per opponent, the App stores up to your 50 most recent match results &mdash; including each opponent's display name &mdash; on your device only. This data never leaves your device and is removed if you uninstall.</p>
+      <p><strong>Crash diagnostics.</strong> We use Sentry (<a href="https://sentry.io">sentry.io</a>) to capture information about crashes &mdash; stack traces, app version, device model, and OS version. This helps us fix bugs. Crash data does not include your display name or game contents. We have configured Sentry to <strong>not</strong> attach IP addresses to crash reports (<code>sendDefaultPii: false</code>).</p>
+      <p><strong>Reports.</strong> If you use the in-app Report option after a match, we collect the reported player's display name, the match ID, and any reason text you choose to provide (up to 500 characters). This data is logged on our server for moderation review. We do not log your display name when you submit a report; only your temporary session identifier is recorded.</p>
     </div>
 
     <div class="card">
-      <h2>Third-Party Services</h2>
-      <p>If we add analytics, ads, or online features in the future, this policy will be updated before those changes are released.</p>
+      <h2>What We Do NOT Collect</h2>
+      <ul>
+        <li>Real name, email, phone number, or contact information</li>
+        <li>Location data of any kind</li>
+        <li>Photos, videos, audio, contacts, files, or documents</li>
+        <li>Financial information or payment data</li>
+        <li>Web browsing history outside the App</li>
+        <li>Health or fitness data</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Third Parties</h2>
+      <p>We share anonymized analytics and crash data with PostHog Inc. and Functional Software Inc. (Sentry) under their respective data processing agreements. We do not sell your data to any third party.</p>
+    </div>
+
+    <div class="card">
+      <h2>Children</h2>
+      <p>The App is intended for players age 13 and older. If we discover that a user under 13 has provided identifying information, we will delete it.</p>
+    </div>
+
+    <div class="card">
+      <h2>Data Deletion</h2>
+      <p>To request deletion of any data associated with your sessions, email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> with your display name and approximate dates of play. We will confirm deletion within 30 days.</p>
+    </div>
+
+    <div class="card">
+      <h2>Changes</h2>
+      <p>We may update this policy as the App evolves. Material changes will be announced in the App and the "Last updated" date above will change.</p>
     </div>
 
     <div class="card">
       <h2>Contact</h2>
-      <p>Email: <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a></p>
+      <p>Global Data and Consulting Solutions, LLC<br/>
+      <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> (general)<br/>
+      <a href="mailto:albero@gdacs.net">albero@gdacs.net</a> (technical)</p>
     </div>
 
-    <p class="muted" style="margin-top:18px;"><a href="/">Back to home</a></p>
+    <p class="muted" style="margin-top:18px;"><a href="/">Back to home</a> &middot; <a href="/terms">Terms of Service</a></p>
   </div>
-
-  <script>
-    document.getElementById('d').textContent = new Date().toISOString().slice(0,10);
-  </script>
 </body>
 </html>
