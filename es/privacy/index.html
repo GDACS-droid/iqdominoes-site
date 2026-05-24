@@ -32,7 +32,7 @@
 <body>
   <div class="wrap">
     <h1>Política de Privacidad</h1>
-    <p class="muted">Última actualización: 2026-05-22</p>
+    <p class="muted">Última actualización: 2026-05-24</p>
 
     <div class="card">
       <p>Global Data and Consulting Solutions, LLC ("GDACS", "nosotros") publica la aplicación móvil IQ Dominó ("la Aplicación"). Esta política explica qué datos recoge la Aplicación, por qué, y cómo se manejan.</p>
@@ -47,6 +47,11 @@
       <p><strong>Confirmación de edad (solo en el dispositivo).</strong> Antes de permitir el juego en línea, la Aplicación te pide confirmar que tienes 13 años o más. Tu respuesta (solo si es afirmativa) se guarda localmente en tu dispositivo para no preguntarte de nuevo. Esta marca de confirmación nunca sale de tu dispositivo.</p>
       <p><strong>Diagnósticos de fallos.</strong> Usamos Sentry (<a href="https://sentry.io">sentry.io</a>) para capturar información sobre fallos &mdash; trazas de pila, versión de la Aplicación, modelo del dispositivo y versión del sistema operativo. Esto nos ayuda a corregir errores. Los datos de fallos no incluyen tu nombre de pantalla ni el contenido de la partida. Hemos configurado Sentry para que <strong>no</strong> adjunte direcciones IP a los informes de fallos (<code>sendDefaultPii: false</code>).</p>
       <p><strong>Reportes.</strong> Si usas la opción de Reportar dentro de la Aplicación después de una partida, recogemos el nombre de pantalla del jugador reportado, el ID de la partida, y cualquier razón que decidas escribir (hasta 500 caracteres). Estos datos quedan registrados en nuestro servidor para revisión de moderación. No registramos tu nombre de pantalla cuando envías un reporte; solamente queda registrado tu identificador de sesión temporal.</p>
+      <p><strong>Tokens de notificaciones push.</strong> Si aceptas notificaciones, enviamos tu token Expo Push, zona horaria del dispositivo (IANA), idioma y preferencias a nuestro servidor, donde se guardan en Upstash Redis hasta 90 días. Solo se usan para enviarte avisos de partidas, recordatorios de racha y notificaciones de lobby que tú hayas activado. Caducan automáticamente si no abres la Aplicación en 90 días.</p>
+      <p><strong>Datos de racha.</strong> Para los recordatorios diarios, guardamos en el servidor tu racha actual, fecha del último juego (en tu zona horaria local) y zona horaria, por hasta 90 días tras tu última partida. Solo se asocian a tu identificador de sesión temporal.</p>
+      <p><strong>Referidos (Mesa Maker).</strong> Cuando tocas un enlace de invitación, guardamos en tu dispositivo el nombre saneado del invitador (letras minúsculas y dígitos, hasta 16 caracteres) y lo enviamos al servidor una vez en tu primera partida para acreditar su contador "Mesa Maker". Los contadores se mantienen mientras la Aplicación esté en servicio.</p>
+      <p><strong>Códigos de mesa familiar.</strong> Un código de mesa familiar que crees se guarda en tu dispositivo y se registra en el servidor mientras esté activo para que otros jugadores puedan unirse.</p>
+      <p><strong>Procesadores del servidor.</strong> Los datos persistentes anteriores se guardan en Upstash, Inc. (EE.UU.). El envío de notificaciones usa Expo Application Services (EAS) operado por 650 Industries, Inc.</p>
     </div>
 
     <div class="card">

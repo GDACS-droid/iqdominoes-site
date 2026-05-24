@@ -38,7 +38,7 @@
 <body>
   <div class="wrap">
     <h1>Privacy Policy</h1>
-    <p class="muted">Last updated: 2026-05-22</p>
+    <p class="muted">Last updated: 2026-05-24</p>
 
     <div class="card">
       <p>Global Data and Consulting Solutions, LLC ("GDACS", "we") publishes the IQ Dominoes mobile application ("the App"). This policy explains what data the App collects, why, and how it is handled.</p>
@@ -53,6 +53,11 @@
       <p><strong>Age confirmation (on-device only).</strong> Before allowing online play, the App asks you to confirm that you are 13 years of age or older. Your answer (yes only) is stored locally on your device so we do not ask again. This confirmation flag never leaves your device.</p>
       <p><strong>Crash diagnostics.</strong> We use Sentry (<a href="https://sentry.io">sentry.io</a>) to capture information about crashes &mdash; stack traces, app version, device model, and OS version. This helps us fix bugs. Crash data does not include your display name or game contents. We have configured Sentry to <strong>not</strong> attach IP addresses to crash reports (<code>sendDefaultPii: false</code>).</p>
       <p><strong>Reports.</strong> If you use the in-app Report option after a match, we collect the reported player's display name, the match ID, and any reason text you choose to provide (up to 500 characters). This data is logged on our server for moderation review. We do not log your display name when you submit a report; only your temporary session identifier is recorded.</p>
+      <p><strong>Push notification tokens.</strong> If you opt in to push notifications, we send your Expo Push token, device timezone (IANA, e.g. "America/New_York"), language, and notification preferences to our server, where they are stored in Upstash Redis with a 90-day expiration. Tokens are used only to send match alerts, streak reminders, and lobby notifications you have enabled. They auto-expire if you do not reopen the App within 90 days.</p>
+      <p><strong>Streak data.</strong> To power daily-streak reminders, we store your current streak count, last-played date (in your local timezone), and timezone on our server for up to 90 days after your last match. This data is keyed only to your temporary session identifier.</p>
+      <p><strong>Referrals (Mesa Maker).</strong> When you tap an invite link, we store the inviter's sanitized display name (lowercase letters/digits, up to 16 characters) on your device and send it to our server once on your first match so we can credit the inviter's "Mesa Maker" tally. Tallies are keyed to the sanitized display name and retained while the App remains in service.</p>
+      <p><strong>Family room codes.</strong> A family-room code you create is stored on your device and registered server-side while the code is active so other players can join using it.</p>
+      <p><strong>Server processors.</strong> Persistent data above is stored at Upstash, Inc. (US). Push delivery uses Expo Application Services (EAS) operated by 650 Industries, Inc.</p>
     </div>
 
     <div class="card">
@@ -79,7 +84,7 @@
 
     <div class="card">
       <h2>Data Deletion</h2>
-      <p>To request deletion of any data associated with your sessions, email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> with your display name and approximate dates of play. We will confirm deletion within 30 days.</p>
+      <p>To request deletion, email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> with your display name and approximate dates of play. We will delete your push token, streak record, Mesa Maker tally, and any family room codes from our servers within 30 days.</p>
     </div>
 
     <div class="card">
