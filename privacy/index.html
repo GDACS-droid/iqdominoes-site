@@ -38,7 +38,7 @@
 <body>
   <div class="wrap">
     <h1>Privacy Policy</h1>
-    <p class="muted">Last updated: 2026-05-24</p>
+    <p class="muted">Last updated: 2026-05-27</p>
 
     <div class="card">
       <p>Global Data and Consulting Solutions, LLC ("GDACS", "we") publishes the IQ Dominoes mobile application ("the App"). This policy explains what data the App collects, why, and how it is handled.</p>
@@ -61,6 +61,14 @@
     </div>
 
     <div class="card">
+      <h2>Advertising and Attribution</h2>
+      <p>To measure the effectiveness of advertising campaigns we run on third-party platforms, the App integrates two attribution SDKs (Meta and AppsFlyer). <strong>We have configured both to NOT collect your advertising identifier (IDFA on iOS, AAID on Android) and NOT to track you across other apps or websites</strong> &mdash; consistent with our "No Tracking" App Store privacy label. Because we do not request tracking permission, you will <strong>not</strong> see Apple's App Tracking Transparency prompt.</p>
+      <p><strong>Meta Platforms, Inc. (Facebook SDK).</strong> Receives aggregated install and app-open events, with <strong>no advertising identifier attached</strong>, used to measure campaigns we run on Meta's platforms (Facebook, Instagram). Meta's data handling is governed by the <a href="https://www.facebook.com/about/privacy/">Meta Privacy Policy</a>.</p>
+      <p><strong>AppsFlyer Inc. (Mobile Measurement Partner).</strong> Receives privacy-preserving install-attribution signals &mdash; primarily Apple's <strong>SKAdNetwork</strong> (aggregated and device-anonymous) plus coarse, non-identifying context &mdash; to attribute installs to campaigns across Meta, Google, and Apple Search Ads. AppsFlyer's data handling is governed by the <a href="https://www.appsflyer.com/legal/services-privacy-policy/">AppsFlyer Services Privacy Policy</a>.</p>
+      <p>No device-level cross-app identifier is collected. Attribution relies on Apple SKAdNetwork and aggregated, non-identifying signals only.</p>
+    </div>
+
+    <div class="card">
       <h2>What We Do NOT Collect</h2>
       <ul>
         <li>Real name, email, phone number, or contact information</li>
@@ -74,7 +82,38 @@
 
     <div class="card">
       <h2>Third Parties</h2>
-      <p>We share anonymized analytics and crash data with PostHog Inc. and Functional Software Inc. (Sentry) under their respective data processing agreements. We do not sell your data to any third party.</p>
+      <p>We share anonymized analytics and crash data with PostHog Inc. and Functional Software Inc. (Sentry) under their respective data processing agreements. We share install and ad-attribution data with Meta Platforms, Inc. and AppsFlyer Inc. as described in the "Advertising and Attribution" section above. We do not sell your data to any third party.</p>
+      <p>Our sub-processors and their data terms:</p>
+      <ul>
+        <li>PostHog Inc. &mdash; product analytics (<a href="https://posthog.com/privacy">Privacy &amp; DPA</a>)</li>
+        <li>Functional Software, Inc. (Sentry) &mdash; crash diagnostics (<a href="https://sentry.io/privacy/">Privacy &amp; DPA</a>)</li>
+        <li>Upstash, Inc. &mdash; Redis storage for push tokens / streaks (<a href="https://upstash.com/trust">Trust &amp; Privacy</a>)</li>
+        <li>650 Industries, Inc. (Expo / EAS) &mdash; push notification delivery (<a href="https://expo.dev/privacy">Privacy</a>)</li>
+        <li>Meta Platforms, Inc. and AppsFlyer Inc. &mdash; advertising attribution (linked above)</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Legal Basis for Processing (GDPR)</h2>
+      <p>For users in the EU/EEA and UK, we rely on the following lawful bases under Article 6(1) of the GDPR:</p>
+      <ul>
+        <li><strong>Legitimate interests (Art. 6(1)(f)):</strong> anonymous product analytics (PostHog), crash diagnostics with personal data stripped (Sentry), abuse/moderation handling (player reports), and privacy-preserving advertising attribution (Apple SKAdNetwork / aggregated signals) &mdash; to operate, secure, debug, and improve the App. None of these involve cross-app tracking or a device advertising identifier.</li>
+        <li><strong>Performance of a service you request (Art. 6(1)(b)):</strong> matchmaking and online-play coordination, push notifications you opt into, daily-streak reminders, and family-room codes.</li>
+        <li><strong>Consent (Art. 6(1)(a)):</strong> where applicable, e.g. enabling push notifications. You can withdraw consent at any time via the in-app Settings &rarr; Analytics &amp; Crash Reports toggle or your device notification settings.</li>
+      </ul>
+      <p>The App does not collect a device advertising identifier and shows no App Tracking Transparency prompt, so no consent-based cross-app tracking takes place.</p>
+    </div>
+
+    <div class="card">
+      <h2>Your Privacy Rights (GDPR)</h2>
+      <p>If you are in the EU/EEA or UK, you have the right to access, rectify, erase, restrict, or object to our processing of your personal data, and the right to data portability. To exercise any of these, email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> (see "Data Deletion" for what we hold and our 30-day turnaround). You also have the right to lodge a complaint with your local data-protection supervisory authority.</p>
+      <p><strong>International transfers.</strong> Our servers and sub-processors are located in the United States, so the data described in this policy is processed in the US. Where required, transfers rely on Standard Contractual Clauses or equivalent safeguards offered by our sub-processors.</p>
+    </div>
+
+    <div class="card">
+      <h2>California Privacy Rights (CCPA/CPRA)</h2>
+      <p>Under the California Consumer Privacy Act, California residents have the right to know what personal information we collect (described above), to request its deletion or correction, and to opt out of any sale or sharing of personal information.</p>
+      <p><strong>We do not sell your personal information, and we do not share it for cross-context behavioral advertising.</strong> The advertising attribution described above uses aggregated, device-anonymous signals (Apple SKAdNetwork), not the sale or sharing of personal information. To exercise your California rights, email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a>.</p>
     </div>
 
     <div class="card">
