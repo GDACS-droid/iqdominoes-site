@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.iqdominoes.app",
+      "sha256_cert_fingerprints": [
+        "E8:14:3F:65:31:E2:A0:1F:A7:9B:FC:4F:DA:76:4C:20:E1:D0:E9:0A:8D:94:DF:71:B0:93:66:A8:6E:75:7D:DC"
+      ]
+    }
+  }
+]
