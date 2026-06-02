@@ -38,7 +38,7 @@
 <body>
   <div class="wrap">
     <h1>Privacy Policy</h1>
-    <p class="muted">Last updated: 2026-05-27</p>
+    <p class="muted">Last updated: 2026-06-02</p>
 
     <div class="card">
       <p>Global Data and Consulting Solutions, LLC ("GDACS", "we") publishes the IQ Dominoes mobile application ("the App"). This policy explains what data the App collects, why, and how it is handled.</p>
@@ -62,10 +62,11 @@
 
     <div class="card">
       <h2>Advertising and Attribution</h2>
-      <p>To measure the effectiveness of advertising campaigns we run on third-party platforms, the App integrates two attribution SDKs (Meta and AppsFlyer). <strong>We have configured both to NOT collect your advertising identifier (IDFA on iOS, AAID on Android) and NOT to track you across other apps or websites</strong> &mdash; consistent with our "No Tracking" App Store privacy label. Because we do not request tracking permission, you will <strong>not</strong> see Apple's App Tracking Transparency prompt.</p>
-      <p><strong>Meta Platforms, Inc. (Facebook SDK).</strong> Receives aggregated install and app-open events, with <strong>no advertising identifier attached</strong>, used to measure campaigns we run on Meta's platforms (Facebook, Instagram). Meta's data handling is governed by the <a href="https://www.facebook.com/about/privacy/">Meta Privacy Policy</a>.</p>
-      <p><strong>AppsFlyer Inc. (Mobile Measurement Partner).</strong> Receives privacy-preserving install-attribution signals &mdash; primarily Apple's <strong>SKAdNetwork</strong> (aggregated and device-anonymous) plus coarse, non-identifying context &mdash; to attribute installs to campaigns across Meta, Google, and Apple Search Ads. AppsFlyer's data handling is governed by the <a href="https://www.appsflyer.com/legal/services-privacy-policy/">AppsFlyer Services Privacy Policy</a>.</p>
-      <p>No device-level cross-app identifier is collected. Attribution relies on Apple SKAdNetwork and aggregated, non-identifying signals only.</p>
+      <p>To measure the effectiveness of advertising campaigns we run on third-party platforms (Google, Meta, and Apple Search Ads), the App integrates attribution SDKs from <strong>AppsFlyer</strong> and <strong>Meta</strong>, and uses Google's app-conversion measurement.</p>
+      <p><strong>On Android,</strong> the App collects and shares the <strong>Android Advertising ID (AAID)</strong> and related device identifiers with AppsFlyer, Meta, and Google in order to attribute an app install to the campaign that drove it and to measure ad performance. You can reset this identifier, or opt out of ad personalization, at any time in your device's <em>Settings &rarr; Privacy &rarr; Ads</em>.</p>
+      <p><strong>On iOS,</strong> the App does <strong>not</strong> request App Tracking Transparency permission, so the IDFA is not collected and you will not see the ATT prompt. iOS attribution relies only on Apple's privacy-preserving <strong>SKAdNetwork</strong> and aggregated signals.</p>
+      <p><strong>Meta Platforms, Inc. (Facebook SDK)</strong> receives install and app-open events &mdash; and, on Android, the advertising identifier &mdash; to measure campaigns we run on Facebook and Instagram. Meta's data handling is governed by the <a href="https://www.facebook.com/about/privacy/">Meta Privacy Policy</a>.</p>
+      <p><strong>AppsFlyer Inc. (Mobile Measurement Partner)</strong> receives install-attribution signals &mdash; the advertising identifier on Android, and SKAdNetwork / aggregated signals on iOS &mdash; to attribute installs across Google, Meta, and Apple Search Ads. AppsFlyer's data handling is governed by the <a href="https://www.appsflyer.com/legal/services-privacy-policy/">AppsFlyer Services Privacy Policy</a>.</p>
     </div>
 
     <div class="card">
@@ -97,11 +98,11 @@
       <h2>Legal Basis for Processing (GDPR)</h2>
       <p>For users in the EU/EEA and UK, we rely on the following lawful bases under Article 6(1) of the GDPR:</p>
       <ul>
-        <li><strong>Legitimate interests (Art. 6(1)(f)):</strong> anonymous product analytics (PostHog), crash diagnostics with personal data stripped (Sentry), abuse/moderation handling (player reports), and privacy-preserving advertising attribution (Apple SKAdNetwork / aggregated signals) &mdash; to operate, secure, debug, and improve the App. None of these involve cross-app tracking or a device advertising identifier.</li>
+        <li><strong>Legitimate interests (Art. 6(1)(f)):</strong> anonymous product analytics (PostHog), crash diagnostics with personal data stripped (Sentry), abuse/moderation handling (player reports), and advertising attribution / ad-performance measurement &mdash; which on Android includes the Android Advertising ID, and on iOS uses Apple SKAdNetwork / aggregated signals &mdash; to operate, secure, debug, improve, and promote the App.</li>
         <li><strong>Performance of a service you request (Art. 6(1)(b)):</strong> matchmaking and online-play coordination, push notifications you opt into, daily-streak reminders, and family-room codes.</li>
         <li><strong>Consent (Art. 6(1)(a)):</strong> where applicable, e.g. enabling push notifications. You can withdraw consent at any time via the in-app Settings &rarr; Analytics &amp; Crash Reports toggle or your device notification settings.</li>
       </ul>
-      <p>The App does not collect a device advertising identifier and shows no App Tracking Transparency prompt, so no consent-based cross-app tracking takes place.</p>
+      <p>On Android, the advertising identifier is collected and shared with our attribution partners to measure our own advertising. On iOS, no IDFA is collected and no App Tracking Transparency prompt is shown. You can reset or limit the advertising identifier in your device's ad settings at any time.</p>
     </div>
 
     <div class="card">
@@ -113,7 +114,7 @@
     <div class="card">
       <h2>California Privacy Rights (CCPA/CPRA)</h2>
       <p>Under the California Consumer Privacy Act, California residents have the right to know what personal information we collect (described above), to request its deletion or correction, and to opt out of any sale or sharing of personal information.</p>
-      <p><strong>We do not sell your personal information, and we do not share it for cross-context behavioral advertising.</strong> The advertising attribution described above uses aggregated, device-anonymous signals (Apple SKAdNetwork), not the sale or sharing of personal information. To exercise your California rights, email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a>.</p>
+      <p>We do not sell your personal information for money. On Android, we <strong>share</strong> the advertising identifier with our attribution partners (AppsFlyer, Meta, Google) to measure our own advertising, which may constitute "sharing" under the CPRA. You can opt out by resetting or deleting your Advertising ID, or enabling "Opt out of Ads Personalization," in your device's <em>Settings &rarr; Privacy &rarr; Ads</em>, and by emailing <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> to exercise your California rights. On iOS, attribution uses Apple SKAdNetwork (aggregated, device-anonymous) only.</p>
     </div>
 
     <div class="card">
@@ -122,8 +123,11 @@
     </div>
 
     <div class="card">
-      <h2>Data Deletion</h2>
-      <p>To request deletion, email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> with your display name and approximate dates of play. We will delete your push token, streak record, Mesa Maker tally, and any family room codes from our servers within 30 days.</p>
+      <h2 id="data-deletion">Data Deletion</h2>
+      <p><strong>How to request deletion:</strong> email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> with your in-app <strong>display name</strong> and the approximate dates you played. No account is required. We respond within <strong>30 days</strong>.</p>
+      <p><strong>What we delete:</strong> your push-notification token, daily-streak record, Mesa Maker referral tally, family-room codes, per-install engagement record, and any moderation reports tied to your sessions &mdash; from our servers and our processors (Upstash, Expo). We also instruct our advertising and analytics partners (AppsFlyer, Meta, Google, PostHog) to delete data associated with your device / advertising identifier where their systems support deletion requests.</p>
+      <p><strong>What is kept:</strong> aggregated, non-identifying analytics and crash statistics that cannot be linked back to you, plus any records we are legally required to retain. On-device data (display name, opponent history, age-confirmation flag) is removed when you uninstall the App.</p>
+      <p>Most server data also auto-expires on its own &mdash; push tokens, streaks, and engagement records are deleted 90 days after your last session.</p>
     </div>
 
     <div class="card">
