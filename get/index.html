@@ -1,0 +1,477 @@
+<!doctype html>
+<!--
+  /get/  —  AppsFlyer OneLink desktop/web fallback + warm invite-conversion page.
+  This page is ONE URL that must serve everyone (iOS / Android / desktop, EN / ES),
+  so unlike the rest of the site (separate / and /es/ URLs) it auto-detects
+  navigator.language AND device via userAgent in a tiny inline script. That is a
+  deliberate, justified divergence from the site's separate-locale-URL pattern —
+  a single OneLink redirect target cannot be two URLs.
+
+  No build step. No framework. No third-party trackers or CDN requests.
+  All CSS inlined (site convention). Badges + QR lib vendored locally in /assets/.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IQ Dominoes — You're invited to the table · Te invitaron a la mesa</title>
+  <meta name="description" content="Your friend invited you to play Cuban dominoes on IQ Dominoes. Free, no email, no card — just your name. Download for iPhone or Android. · Tu socio te invitó a la mesa. Gratis, sin correo. Pon tu nombre y a jugar." />
+  <meta name="author" content="Global Data and Consulting Solutions, LLC" />
+  <meta name="theme-color" content="#0f3d1a" />
+  <meta name="robots" content="noindex,follow" />
+
+  <link rel="canonical" href="https://www.iqdominoes.com/get/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="IQ Dominoes" />
+  <meta property="og:title" content="Te invitaron a la mesa · You're invited to the table" />
+  <meta property="og:description" content="Tu socio te invitó a jugar dominó cubano. Gratis, sin correo — pon tu nombre y a jugar. · Your friend invited you to play Cuban dominoes. Free, no email — just your name." />
+  <meta property="og:url" content="https://www.iqdominoes.com/get/" />
+  <meta property="og:image" content="https://www.iqdominoes.com/assets/og-image.png" />
+  <meta property="og:image:alt" content="IQ Dominoes — Cuban dominoes online" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:locale:alternate" content="en_US" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Te invitaron a la mesa · You're invited to the table" />
+  <meta name="twitter:description" content="Tu socio te invitó a jugar dominó cubano. Gratis, pon tu nombre y a jugar." />
+  <meta name="twitter:image" content="https://www.iqdominoes.com/assets/og-image.png" />
+
+  <style>
+    /* ---- Site design tokens (copied from index.html / es/index.html) ---- */
+    *{box-sizing:border-box}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Arial,sans-serif;background:#0f3d1a;color:#fff;line-height:1.55}
+    .wrap{max-width:900px;margin:0 auto;padding:48px 20px}
+    a{color:#D4AF37;text-decoration:none}
+    a:hover{text-decoration:underline}
+    h1{font-size:2.6rem;margin:0 0 8px;letter-spacing:-0.5px}
+    h2{font-size:1.5rem;margin:0 0 12px}
+    h3{font-size:1.1rem;margin:0 0 6px}
+    p{margin:0 0 10px}
+    .lede{font-size:1.15rem;color:rgba(255,255,255,0.9);margin-top:6px;max-width:640px}
+    .card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px 18px;margin-top:16px}
+    .muted{color:rgba(255,255,255,0.75)}
+    .btn{display:inline-block;margin-top:14px;background:#D4AF37;color:#1a1a1a;padding:12px 18px;border-radius:10px;font-weight:700}
+    .btn:hover{text-decoration:none;filter:brightness(1.05)}
+    .tertiary{display:inline-block;color:#D4AF37;margin-top:6px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+    .feature{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px}
+    .feature h3{display:flex;align-items:baseline;gap:8px}
+    .emoji{font-size:1.4rem;line-height:1}
+    footer{margin-top:48px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);font-size:0.95rem}
+    footer nav{margin-bottom:10px}
+    footer nav a{margin-right:14px;display:inline-block;margin-bottom:6px}
+
+    /* ---- /get-specific additions (gold-tinted highlight box matches site .cta-strip) ---- */
+    .invite-line{font-size:1.25rem;font-weight:700;color:#D4AF37;margin:0 0 6px}
+    .cta-strip{background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.35);border-radius:14px;padding:18px 18px;margin-top:18px}
+
+    /* Copyable room-code pill */
+    .code-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+    .code-pill{display:inline-flex;align-items:center;gap:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:1.25rem;font-weight:800;letter-spacing:2px;background:rgba(0,0,0,0.25);border:1px solid rgba(212,175,55,0.45);color:#fff;border-radius:10px;padding:8px 14px}
+    .copy-btn{cursor:pointer;background:#D4AF37;color:#1a1a1a;border:none;font-weight:700;border-radius:8px;padding:8px 12px;font-size:0.95rem}
+    .copy-btn:focus-visible{outline:3px solid #fff;outline-offset:2px}
+
+    /* Store badges */
+    .badges{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:18px}
+    .badge-link{display:inline-block;line-height:0}
+    .badge-link:hover{text-decoration:none;filter:brightness(1.06)}
+    .badge-link:focus-visible{outline:3px solid #D4AF37;outline-offset:3px;border-radius:8px}
+    /* Apple SVG + Google PNG normalized to the SAME visible height so they sit even.
+       Google's official PNG carries a built-in transparent clear-space border, so it
+       renders a touch larger by the box but matches Apple at the glyph — do NOT crop it
+       (cropping breaks Google's mandated 1/4-height clear space). */
+    .badge-apple{height:54px;width:auto;display:block}
+    .badge-google{height:80px;width:auto;display:block;margin:-13px 0} /* negative margin offsets the PNG's transparent padding so the glyph height ~matches Apple */
+    /* Big single-platform badge on mobile = bigger tap target */
+    .badge-primary .badge-apple{height:60px}
+    .badge-primary .badge-google{height:90px;margin:-15px 0}
+
+    /* QR block (desktop only) */
+    #qrBlock{margin-top:6px}
+    .qr-tile{display:inline-block;background:#fff;padding:14px;border-radius:14px;line-height:0}
+    .qr-tile img{display:block;width:196px;height:196px;image-rendering:pixelated}
+    .qr-flex{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+
+    /* Language toggle */
+    .topbar{display:flex;justify-content:flex-end;margin-bottom:8px}
+    .lang-toggle{display:inline-flex;border:1px solid rgba(255,255,255,0.25);border-radius:999px;overflow:hidden}
+    .lang-toggle button{cursor:pointer;background:transparent;color:rgba(255,255,255,0.8);border:none;padding:6px 14px;font-weight:700;font-size:0.9rem}
+    .lang-toggle button[aria-pressed="true"]{background:#D4AF37;color:#1a1a1a}
+    .lang-toggle button:focus-visible{outline:3px solid #fff;outline-offset:-3px}
+
+    /* "Other device?" reveal for desktop edge cases */
+    .other-device{margin-top:14px}
+    .other-device summary{cursor:pointer;color:#D4AF37;font-weight:600;list-style:none}
+    .other-device summary::-webkit-details-marker{display:none}
+    .other-device summary:focus-visible{outline:3px solid #D4AF37;outline-offset:3px;border-radius:6px}
+
+    /* lang visibility — JS sets data-lang on <html>; default (no JS) shows ES then EN stacked */
+    [data-l]{display:none}
+    html[data-lang="es"] [data-l="es"]{display:block}
+    html[data-lang="en"] [data-l="en"]{display:block}
+    html[data-lang="es"] span[data-l="es"],
+    html[data-lang="en"] span[data-l="en"]{display:inline}
+    /* No-JS fallback: show both languages (ES first), never a dead page */
+    html:not([data-lang]) [data-l]{display:block}
+
+    @media (max-width:600px){
+      .wrap{padding:32px 16px}
+      h1{font-size:2.1rem}
+      .grid{grid-template-columns:1fr}
+      .qr-flex{justify-content:center}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *{transition:none!important;animation:none!important}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="topbar">
+      <div class="lang-toggle" role="group" aria-label="Language / Idioma">
+        <button id="langEs" type="button" aria-pressed="false" lang="es">ES</button>
+        <button id="langEn" type="button" aria-pressed="false" lang="en">EN</button>
+      </div>
+    </div>
+
+    <main>
+      <header>
+        <h1>IQ Dominoes</h1>
+
+        <!-- ===== INVITE HERO (warmth before the ask) ===== -->
+        <!-- Generic warm invite by default; JS upgrades the line + name/code when params exist. -->
+        <p class="invite-line" id="inviteLineEs" lang="es" data-l="es">Te invitaron a la mesa.</p>
+        <p class="invite-line" id="inviteLineEn" lang="en" data-l="en">You've been invited to the table.</p>
+
+        <p class="lede" lang="es" data-l="es">Dominó cubano de verdad — la mesa en tu teléfono. Doble-nueve, capicúa y pollona, justo como en casa.</p>
+        <p class="lede" lang="en" data-l="en">Real Cuban dominoes — the table in your phone. Double-nine, capicúa, and the pollona, just like at home.</p>
+
+        <!-- Room/invite code pill (hidden until JS finds a code in the URL) -->
+        <div id="codeWrapEs" lang="es" data-l="es" style="display:none">
+          <div class="cta-strip">
+            <p style="margin:0 0 4px;font-weight:700">Tu mesa te espera</p>
+            <div class="code-row">
+              <span class="code-pill"><span class="muted" style="font-size:0.8rem;letter-spacing:0">Código</span> <span id="codeValEs"></span></span>
+              <button class="copy-btn" type="button" data-copy="es">Copiar</button>
+            </div>
+            <p class="muted" style="margin:8px 0 0;font-size:0.92rem">El código entra solo cuando abras la app. Solo descárgala.</p>
+          </div>
+        </div>
+        <div id="codeWrapEn" lang="en" data-l="en" style="display:none">
+          <div class="cta-strip">
+            <p style="margin:0 0 4px;font-weight:700">Your table is waiting</p>
+            <div class="code-row">
+              <span class="code-pill"><span class="muted" style="font-size:0.8rem;letter-spacing:0">Code</span> <span id="codeValEn"></span></span>
+              <button class="copy-btn" type="button" data-copy="en">Copy</button>
+            </div>
+            <p class="muted" style="margin:8px 0 0;font-size:0.92rem">It fills in automatically once the app opens. Just download it.</p>
+          </div>
+        </div>
+
+        <!-- ===== PRIMARY CTA (platform-matched; JS rewrites this region) ===== -->
+        <!-- Default (no JS / unknown device): show BOTH official badges so nobody is dead-ended. -->
+        <div id="ctaPrimary" class="badges" aria-label="Download IQ Dominoes">
+          <a class="badge-link" id="appleLink" href="https://apps.apple.com/app/id6759262289"
+             aria-label="Download IQ Dominoes on the App Store / Descargar IQ Dominó en la App Store">
+            <img class="badge-apple" id="appleImg" src="/assets/apple-en.svg" alt="Download on the App Store" width="180" height="54" />
+          </a>
+          <a class="badge-link" id="googleLink" href="https://play.google.com/store/apps/details?id=com.iqdominoes.app"
+             aria-label="Get IQ Dominoes on Google Play / Disponible en Google Play">
+            <img class="badge-google" id="googleImg" src="/assets/google-en.png" alt="Get it on Google Play" width="207" height="80" />
+          </a>
+        </div>
+
+        <!-- ===== DESKTOP QR (hidden by default; JS reveals on desktop only) ===== -->
+        <div id="qrBlock" class="card" style="display:none" aria-labelledby="qrHeading">
+          <div class="qr-flex">
+            <div class="qr-tile">
+              <img id="qrImg" alt="QR code to download IQ Dominoes / Código QR para descargar IQ Dominó" width="196" height="196" />
+            </div>
+            <div>
+              <h3 id="qrHeading" lang="es" data-l="es">Escanéalo con tu teléfono</h3>
+              <h3 lang="en" data-l="en">Scan with your phone</h3>
+              <p class="muted" lang="es" data-l="es" style="margin:0">Apunta la cámara al código y te lleva directo a la app — con tu invitación incluida.</p>
+              <p class="muted" lang="en" data-l="en" style="margin:0">Point your camera at the code — it takes you straight to the app, invite and all.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust microcopy — the proven friction-killer from the live /es/ page -->
+        <p class="muted" lang="es" data-l="es" style="margin-top:14px">Gratis. Sin correo, sin tarjeta. Pon tu nombre y a jugar.</p>
+        <p class="muted" lang="en" data-l="en" style="margin-top:14px">Free. No email, no card. Just your name and you're playing.</p>
+
+        <!-- Edge case: desktop-UA on a touch tablet, or wrong-platform visitor -->
+        <details class="other-device" id="otherDevice">
+          <summary lang="es" data-l="es">¿En otro dispositivo? Ver todas las opciones de descarga</summary>
+          <summary lang="en" data-l="en">On another device? Show all download options</summary>
+          <div class="badges" id="ctaAll" aria-label="All download options">
+            <a class="badge-link" href="https://apps.apple.com/app/id6759262289"
+               aria-label="Download IQ Dominoes on the App Store">
+              <img class="badge-apple" id="appleImgAll" src="/assets/apple-en.svg" alt="Download on the App Store" width="180" height="54" />
+            </a>
+            <a class="badge-link" href="https://play.google.com/store/apps/details?id=com.iqdominoes.app"
+               aria-label="Get IQ Dominoes on Google Play">
+              <img class="badge-google" id="googleImgAll" src="/assets/google-en.png" alt="Get it on Google Play" width="207" height="80" />
+            </a>
+          </div>
+        </details>
+      </header>
+
+      <!-- ===== Light benefit reinforcement (one screen down) ===== -->
+      <section aria-labelledby="why-heading">
+        <h2 id="why-heading" lang="es" data-l="es" style="margin-top:36px">Por qué vas a volver a la mesa</h2>
+        <h2 lang="en" data-l="en" style="margin-top:36px">Why you'll keep coming back</h2>
+        <div class="grid">
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">🎴</span> <span lang="es" data-l="es">Doble-nueve auténtico</span><span lang="en" data-l="en">Authentic double-nine</span></h3>
+            <p class="muted" lang="es" data-l="es">Las 55 fichas y las reglas cubanas de verdad. Capicúa suma extra, la pollona paga doble — como lo enseñaba Tío.</p>
+            <p class="muted" lang="en" data-l="en">All 55 tiles, real Cuban rules. Capicúa scores extra, the pollona pays double — the way Tío taught it.</p>
+          </article>
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">👥</span> <span lang="es" data-l="es">Mano a mano o en pareja</span><span lang="en" data-l="en">Duel or partner up</span></h3>
+            <p class="muted" lang="es" data-l="es">El duelo 1v1, parejas 2v2 (la mesa), cuatro jugadores, o tú solo contra la máquina que sabe pelear.</p>
+            <p class="muted" lang="en" data-l="en">1v1 duels, 2v2 teams (la mesa), four-player, or solo against AI that actually fights back.</p>
+          </article>
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">🏠</span> <span lang="es" data-l="es">Mesas privadas en familia</span><span lang="en" data-l="en">Private family rooms</span></h3>
+            <p class="muted" lang="es" data-l="es">Crea una mesa con un código y juega solo con tu gente, estén donde estén — Miami, La Habana o donde sea.</p>
+            <p class="muted" lang="en" data-l="en">Spin up a room with a code and play only with your people, wherever they are — Miami, Havana, anywhere.</p>
+          </article>
+          <article class="feature">
+            <h3><span class="emoji" aria-hidden="true">🔒</span> <span lang="es" data-l="es">Limpio y sin trampas</span><span lang="en" data-l="en">Clean, no catch</span></h3>
+            <p class="muted" lang="es" data-l="es">Sin anuncios durante la partida, sin apuestas con dinero real, sin pagar para ganar.</p>
+            <p class="muted" lang="en" data-l="en">No ads during play, no real-money wagers, no pay-to-win.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===== Repeated platform CTA after benefits (measurable install lift) ===== -->
+      <section class="cta-strip" aria-labelledby="cta2-heading" style="text-align:center;margin-top:28px">
+        <h2 id="cta2-heading" lang="es" data-l="es">¿Listo para tirar la primera ficha?</h2>
+        <h2 lang="en" data-l="en">Ready to play your first tile?</h2>
+        <p class="muted" lang="es" data-l="es">Tu socio ya está en la mesa. Descarga y siéntate.</p>
+        <p class="muted" lang="en" data-l="en">Your friend's already at the table. Download and sit down.</p>
+        <!-- JS mirrors the platform-matched badge(s) here too -->
+        <div id="ctaPrimary2" class="badges" style="justify-content:center" aria-label="Download IQ Dominoes">
+          <a class="badge-link" href="https://apps.apple.com/app/id6759262289"
+             aria-label="Download IQ Dominoes on the App Store">
+            <img class="badge-apple" id="appleImg2" src="/assets/apple-en.svg" alt="Download on the App Store" width="180" height="54" />
+          </a>
+          <a class="badge-link" href="https://play.google.com/store/apps/details?id=com.iqdominoes.app"
+             aria-label="Get IQ Dominoes on Google Play">
+            <img class="badge-google" id="googleImg2" src="/assets/google-en.png" alt="Get it on Google Play" width="207" height="80" />
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/es/" hreflang="es">Español</a>
+        <a href="/how-to-play/" lang="es" data-l="es" hreflang="en">Cómo jugar</a>
+        <a href="/how-to-play/" lang="en" data-l="en">How to Play</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/support">Support</a>
+      </nav>
+      <p class="muted">© 2026 Global Data and Consulting Solutions, LLC. IQ Dominoes is a product of GDACS, registered in Florida.</p>
+      <p class="muted">Contact: <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a></p>
+    </footer>
+  </div>
+
+  <!-- QR generator vendored locally (qrcode-generator by Kazuhiko Arase, MIT, 0-deps).
+       Loaded for everyone but only USED on desktop. ~56KB, no network calls, no tracker. -->
+  <script src="/assets/qrcode.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    var IOS_URL = 'https://apps.apple.com/app/id6759262289';
+    var ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.iqdominoes.app';
+    // Localized store paths (Apple supports /es/, Google takes &hl=es)
+    var IOS_URL_ES = 'https://apps.apple.com/es/app/id6759262289';
+    var ANDROID_URL_ES = 'https://play.google.com/store/apps/details?id=com.iqdominoes.app&hl=es';
+
+    var docEl = document.documentElement;
+
+    /* ---------- 1) LANGUAGE ---------- */
+    function detectLang() {
+      try {
+        var saved = localStorage.getItem('iqd_lang');
+        if (saved === 'es' || saved === 'en') return saved;
+      } catch (e) {}
+      var nav = (navigator.language || (navigator.languages && navigator.languages[0]) || 'en').toLowerCase();
+      return nav.indexOf('es') === 0 ? 'es' : 'en';
+    }
+    function applyLang(lang) {
+      docEl.setAttribute('data-lang', lang);
+      docEl.setAttribute('lang', lang);
+      var es = document.getElementById('langEs');
+      var en = document.getElementById('langEn');
+      if (es) es.setAttribute('aria-pressed', String(lang === 'es'));
+      if (en) en.setAttribute('aria-pressed', String(lang === 'en'));
+      applyBadgeLocale(lang);
+    }
+    var currentLang = detectLang();
+    applyLang(currentLang);
+
+    document.getElementById('langEs').addEventListener('click', function () {
+      currentLang = 'es'; try { localStorage.setItem('iqd_lang', 'es'); } catch (e) {} applyLang('es');
+    });
+    document.getElementById('langEn').addEventListener('click', function () {
+      currentLang = 'en'; try { localStorage.setItem('iqd_lang', 'en'); } catch (e) {} applyLang('en');
+    });
+
+    /* ---------- 2) PLATFORM ---------- */
+    var ua = navigator.userAgent || '';
+    var isIOS = /iPad|iPhone|iPod/.test(ua) ||
+      // iPadOS 13+ reports as Mac; disambiguate via touch points
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var isAndroid = /Android/i.test(ua);
+    var isMobile = isIOS || isAndroid;
+
+    // Swap badge art to the localized variant. Keep link target locale-correct too.
+    function applyBadgeLocale(lang) {
+      var apple = lang === 'es' ? '/assets/apple-es.svg' : '/assets/apple-en.svg';
+      var google = lang === 'es' ? '/assets/google-es.png' : '/assets/google-en.png';
+      var appleAlt = lang === 'es' ? 'Descargar en la App Store' : 'Download on the App Store';
+      var googleAlt = lang === 'es' ? 'Disponible en Google Play' : 'Get it on Google Play';
+      ['appleImg', 'appleImg2', 'appleImgAll'].forEach(function (id) {
+        var el = document.getElementById(id); if (el) { el.src = apple; el.alt = appleAlt; }
+      });
+      ['googleImg', 'googleImg2', 'googleImgAll'].forEach(function (id) {
+        var el = document.getElementById(id); if (el) { el.src = google; el.alt = googleAlt; }
+      });
+      var iosHref = lang === 'es' ? IOS_URL_ES : IOS_URL;
+      var andHref = lang === 'es' ? ANDROID_URL_ES : ANDROID_URL;
+      document.querySelectorAll('a.badge-link').forEach(function (a) {
+        var img = a.querySelector('img');
+        if (!img) return;
+        if (img.className.indexOf('badge-apple') >= 0) a.href = iosHref;
+        else if (img.className.indexOf('badge-google') >= 0) a.href = andHref;
+      });
+    }
+
+    // Render CTA: on mobile show ONLY the matching badge, made bigger (better tap target).
+    // On desktop show BOTH (default markup already does) + reveal the QR.
+    function renderPlatformCTA() {
+      function showSinglePlatform(container) {
+        if (!container) return;
+        container.classList.add('badge-primary');
+        var links = container.querySelectorAll('a.badge-link');
+        links.forEach(function (a) {
+          var img = a.querySelector('img');
+          var isAppleBadge = img && img.className.indexOf('badge-apple') >= 0;
+          var keep = isIOS ? isAppleBadge : !isAppleBadge; // Android keeps Google
+          a.style.display = keep ? 'inline-block' : 'none';
+        });
+      }
+      if (isMobile) {
+        showSinglePlatform(document.getElementById('ctaPrimary'));
+        showSinglePlatform(document.getElementById('ctaPrimary2'));
+        // Non-matching path stays reachable via the <details> "other device" block.
+      } else {
+        // Desktop: both badges already shown; reveal QR and hide the redundant
+        // "other device" disclosure (desktop already shows everything).
+        var qr = document.getElementById('qrBlock');
+        if (qr) qr.style.display = 'block';
+        var other = document.getElementById('otherDevice');
+        if (other) other.style.display = 'none';
+        renderQR();
+      }
+    }
+
+    /* ---------- 3) DESKTOP QR (param-preserving, generated client-side, desktop only) ---------- */
+    function renderQR() {
+      try {
+        // Encode THIS page's URL with its query string intact. When the phone opens it,
+        // the page re-runs this script, UA-routes to the right store, and the invite
+        // param rides along — so the invite context survives the desktop→phone hop.
+        var target = location.href;
+        var qr = qrcode(0, 'M');      // type 0 = auto-size, 'M' = ~15% error correction
+        qr.addData(target);
+        qr.make();
+        var img = document.getElementById('qrImg');
+        if (img) img.src = qr.createDataURL(6, 4); // cellSize 6px, 4-cell quiet zone
+      } catch (e) {
+        // QR is a progressive enhancement — if the lib failed to load, the desktop
+        // visitor still has both clickable badges above. Hide the empty tile.
+        var block = document.getElementById('qrBlock');
+        if (block) block.style.display = 'none';
+      }
+    }
+
+    /* ---------- 4) INVITE WARMTH (referrer name + room code from URL) ---------- */
+    // AppsFlyer forwards deep_link_value, deep_link_sub1-10, af_referrer* to the web
+    // fallback. The exact key is Alberto's to set in the OneLink template, so read a
+    // defensive set of common keys.
+    function getParam(keys) {
+      var p = new URLSearchParams(location.search);
+      for (var i = 0; i < keys.length; i++) {
+        var v = p.get(keys[i]);
+        if (v) return v;
+      }
+      return null;
+    }
+    // SECURITY: query input is attacker-controllable. Sanitize hard, assign via
+    // textContent (never innerHTML). Whitelist + length cap; reject if nothing survives.
+    function cleanName(raw) {
+      if (!raw) return null;
+      var s = decodeURIComponent(String(raw)).replace(/[^\p{L}\p{M}\s'.-]/gu, '').trim();
+      s = s.replace(/\s+/g, ' ').slice(0, 24);
+      return s.length >= 1 ? s : null;
+    }
+    function cleanCode(raw) {
+      if (!raw) return null;
+      var s = String(raw).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+      return s.length >= 3 ? s : null;
+    }
+
+    var inviter = cleanName(getParam(['inviter', 'ref', 'deep_link_sub1', 'af_referrer_name', 'name', 'from']));
+    var roomCode = cleanCode(getParam(['code', 'room', 'deep_link_value', 'deep_link_sub2', 'invite']));
+
+    if (inviter) {
+      // Personalized beats generic ("[Name] te invitó" > "You've been invited").
+      document.getElementById('inviteLineEs').textContent = inviter + ' te invitó a la mesa.';
+      document.getElementById('inviteLineEn').textContent = inviter + ' invited you to the table.';
+    }
+
+    if (roomCode) {
+      document.getElementById('codeValEs').textContent = roomCode;
+      document.getElementById('codeValEn').textContent = roomCode;
+      document.getElementById('codeWrapEs').style.display = 'block';
+      document.getElementById('codeWrapEn').style.display = 'block';
+      // Copy buttons
+      document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var lang = btn.getAttribute('data-copy');
+          var done = lang === 'es' ? '¡Copiado!' : 'Copied!';
+          var label = lang === 'es' ? 'Copiar' : 'Copy';
+          function flash() {
+            btn.textContent = done;
+            btn.setAttribute('aria-live', 'polite');
+            setTimeout(function () { btn.textContent = label; }, 1600);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(roomCode).then(flash, flash);
+          } else {
+            // Fallback for older browsers
+            var t = document.createElement('textarea');
+            t.value = roomCode; document.body.appendChild(t); t.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(t); flash();
+          }
+        });
+      });
+    }
+
+    /* ---------- run ---------- */
+    renderPlatformCTA();
+  })();
+  </script>
+</body>
+</html>
