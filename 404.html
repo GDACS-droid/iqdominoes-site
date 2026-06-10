@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>IQ Dominoes</title>
+  <script>
+    // Legacy invite-link rescue: app builds ≤2.4.1 emitted fallback invite links as
+    // /join/<CODE>?ref=<inviter>, but no /join page ever existed (recipients got a 404).
+    // GitHub Pages routes unknown paths here, so catch that shape and forward to the
+    // working /get/ landing page, which reads deep_link_value + deep_link_sub1.
+    (function () {
+      var m = location.pathname.match(/^\/join\/([A-Za-z0-9]{4,12})\/?$/);
+      if (m) {
+        var ref = new URLSearchParams(location.search).get('ref') || '';
+        location.replace('/get/?deep_link_value=' + encodeURIComponent(m[1]) +
+          (ref ? '&deep_link_sub1=' + encodeURIComponent(ref) : ''));
+      }
+    })();
+  </script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f1b2d; color: #f4ede1; display: flex; min-height: 100vh; align-items: center; justify-content: center; margin: 0; text-align: center; }
+    a { color: #e8a13c; }
+    .wrap { padding: 24px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🁫 Page not found</h1>
+    <p>Looking for a game? <a href="/get/">Get IQ Dominoes</a> or head <a href="/">home</a>.</p>
+  </div>
+</body>
+</html>

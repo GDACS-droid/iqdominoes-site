@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Join a game — IQ Dominoes</title>
+  <script>
+    // /join/ entry point (query-param form: /join/?code=X&ref=Y). Path-form links
+    // (/join/<CODE>) are handled by 404.html since GitHub Pages has no dynamic routes.
+    // Forward to /get/, which renders the inviter + code + store buttons.
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var code = p.get('code') || '';
+      var ref = p.get('ref') || '';
+      location.replace('/get/' + (code ? '?deep_link_value=' + encodeURIComponent(code) +
+        (ref ? '&deep_link_sub1=' + encodeURIComponent(ref) : '') : ''));
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting… <a href="/get/">Continue to IQ Dominoes</a></p>
+</body>
+</html>
