@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#0f3d1a" />
+  <title>IQ Dominó — Hacia dónde vamos</title>
+  <style>
+    :root{
+      --felt:#1a5c2a; --felt-light:#237a38; --felt-dark:#0f3d1a;
+      --gold:#D4AF37; --gold-bright:#FFD700; --gold-dark:#B8960C; --brown:#8B4513;
+      --ivory:#F5F0E8; --tile-border:#2C2C2C; --pip:#1a1a1a;
+      --text:#FFFFFF; --text-muted:#B0B0B0; --text-dark:#1a1a1a;
+      --success:#4CAF50; --warning:#FF9800; --error:#F44336;
+      --cuban-red:#C8202E; --royal-blue:#1B3A8C;
+      --card:rgba(0,0,0,.3); --card-light:rgba(255,255,255,.1);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      background:var(--felt-dark);
+      /* faint felt darkening toward edges — reads as a table without contradicting the flat app bg */
+      background:radial-gradient(circle at 50% 18%, var(--felt) 0%, #15521f 45%, var(--felt-dark) 100%);
+      background-attachment:fixed;
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      line-height:1.55;
+      -webkit-font-smoothing:antialiased;
+    }
+    .wrap{max-width:880px;margin:0 auto;padding:40px 20px 64px}
+    a{color:var(--gold)}
+
+    /* ---------- Brand logo mark ---------- */
+    .brandmark{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:22px}
+    .logo-tile{
+      width:40px;height:70px;background:var(--ivory);border:2px solid var(--tile-border);
+      border-radius:6px;box-shadow:0 4px 6px rgba(0,0,0,.3);
+      display:flex;flex-direction:column;align-items:center;justify-content:space-around;padding:8px 0;
+    }
+    .logo-tile .ld{width:9px;height:9px;border-radius:50%;background:var(--pip)}
+    .logo-tile .div{width:70%;height:1.5px;background:var(--tile-border);opacity:.4}
+    .brandmark .name{font-size:1.35rem;font-weight:800;color:var(--gold);letter-spacing:2px}
+
+    /* ---------- Hero ---------- */
+    .hero{text-align:center;margin-bottom:38px}
+    .hero h1{
+      font-size:2.5rem;line-height:1.1;margin:6px 0 4px;font-weight:800;color:var(--gold);
+      letter-spacing:.5px;
+    }
+    .hero .papa{
+      display:inline-block;margin-top:14px;background:rgba(212,175,55,.18);
+      border:1px solid var(--gold);color:var(--gold);font-weight:700;
+      border-radius:999px;padding:8px 18px;font-size:1.05rem;
+    }
+    .hero .lede{
+      max-width:620px;margin:18px auto 0;font-size:1.12rem;color:rgba(255,255,255,.9);
+    }
+
+    /* ---------- Sections ---------- */
+    section{margin:42px 0}
+    .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .sec-head .kicker{font-size:.78rem;font-weight:800;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+    h2{font-size:1.7rem;margin:.1rem 0 .2rem;font-weight:800;letter-spacing:.3px}
+    .sec-sub{color:var(--text-muted);margin:0 0 18px;font-size:1.02rem}
+
+    /* ---------- Cards ---------- */
+    .card{
+      background:var(--card);border:1px solid var(--card-light);
+      border-radius:14px;padding:18px 20px;margin-top:14px;
+    }
+    .card--gold{border:2px solid var(--gold)}
+    .card h3{margin:0 0 6px;font-size:1.12rem;font-weight:700}
+    .card p{margin:0;color:rgba(255,255,255,.85)}
+
+    .bullets{display:grid;gap:14px}
+    @media(min-width:640px){.bullets.three{grid-template-columns:repeat(3,1fr)}}
+    .bullet{
+      background:var(--card);border:1px solid var(--card-light);border-radius:14px;padding:18px 20px;
+    }
+    .bullet .emoji{font-size:1.8rem;display:block;margin-bottom:8px}
+    .bullet h3{margin:0 0 6px;font-size:1.06rem;font-weight:700;color:var(--gold)}
+    .bullet p{margin:0;color:rgba(255,255,255,.85);font-size:.98rem}
+
+    /* ---------- Health stat strip (Dónde estamos) ---------- */
+    .stat-strip{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px;
+    }
+    @media(min-width:640px){.stat-strip{grid-template-columns:repeat(4,1fr)}}
+    .stat{
+      background:var(--felt-dark);border:1px solid rgba(255,255,255,.08);border-radius:12px;
+      padding:16px 12px;text-align:center;
+    }
+    .stat .num{font-size:1.9rem;font-weight:800;color:var(--gold);line-height:1;font-variant-numeric:tabular-nums}
+    .stat .lbl{font-size:.82rem;color:var(--text-muted);margin-top:6px;display:block}
+    .live-pill{
+      display:inline-flex;align-items:center;gap:7px;background:rgba(76,175,80,.14);
+      border:1px solid var(--success);border-radius:999px;padding:5px 13px;font-size:.85rem;font-weight:700;color:#bdf0c2;
+      margin-top:14px;
+    }
+    .live-pill .dot{width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 0 0 rgba(76,175,80,.6);animation:pulse 1.8s infinite}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(76,175,80,.55)}70%{box-shadow:0 0 0 9px rgba(76,175,80,0)}100%{box-shadow:0 0 0 0 rgba(76,175,80,0)}}
+
+    /* ---------- "Idea de Papá" badge ---------- */
+    .papa-badge{
+      display:inline-flex;align-items:center;gap:7px;background:var(--gold-bright);color:var(--text-dark);
+      font-weight:800;border-radius:999px;padding:6px 14px;font-size:.9rem;letter-spacing:.4px;
+      box-shadow:0 3px 8px rgba(0,0,0,.35);
+    }
+
+    /* ================= PHONE MOCKUPS ================= */
+    .mock-row{display:grid;gap:26px;margin-top:18px}
+    @media(min-width:760px){.mock-row.two{grid-template-columns:repeat(2,1fr)}}
+    figure.mock{margin:0}
+    figcaption{margin-top:12px;color:rgba(255,255,255,.82);font-size:.95rem;text-align:center;font-style:italic}
+
+    .phone{
+      width:100%;max-width:330px;margin:0 auto;background:#0b0b0d;border-radius:38px;
+      padding:12px;box-shadow:0 14px 34px rgba(0,0,0,.5),inset 0 0 0 2px #2a2a2e;
+    }
+    .phone .notch{width:120px;height:22px;background:#0b0b0d;border-radius:0 0 14px 14px;margin:-2px auto 0;position:relative;z-index:3}
+    .screen{
+      background:var(--felt);border-radius:28px;overflow:hidden;position:relative;
+      min-height:560px;display:flex;flex-direction:column;
+    }
+    /* status bar */
+    .statusbar{display:flex;justify-content:space-between;align-items:center;padding:10px 18px 4px;font-size:.74rem;color:#fff;font-weight:600}
+    .statusbar .right{display:flex;gap:6px;align-items:center;opacity:.9}
+    .scr-pad{padding:8px 16px 18px;flex:1;display:flex;flex-direction:column}
+    .scr-title{font-size:1.25rem;font-weight:800;color:var(--gold);letter-spacing:1px;text-align:center;margin:6px 0 2px}
+    .scr-sub{font-size:.82rem;color:var(--text-muted);text-align:center;margin:0 0 14px}
+
+    /* generic in-screen card */
+    .ui-card{background:var(--card);border:1px solid var(--card-light);border-radius:12px;padding:13px 14px;margin-bottom:11px}
+
+    /* ----- DOMINO TILE (CSS) ----- */
+    .tile{
+      width:30px;height:60px;background:var(--ivory);border:1px solid var(--tile-border);
+      border-radius:4px;box-shadow:0 2px 3px rgba(0,0,0,.3);
+      display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+      padding:4px 0;flex:0 0 auto;
+    }
+    .tile.h{width:60px;height:30px;flex-direction:row;padding:0 4px}
+    .tile .half{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+      width:100%;height:50%;padding:2px;gap:0}
+    .tile.h .half{height:100%;width:50%}
+    .tile .divh{width:80%;height:1px;background:var(--tile-border);opacity:.4}
+    .tile.h .divv{height:80%;width:1px;background:var(--tile-border);opacity:.4}
+    .tile .p{width:5px;height:5px;border-radius:50%;background:var(--pip);align-self:center;justify-self:center}
+    /* pip grid cells: positions 1..9 (col-row) */
+    .c11{grid-area:1/1}.c12{grid-area:2/1}.c13{grid-area:3/1}
+    .c21{grid-area:1/2}.c22{grid-area:2/2}.c23{grid-area:3/2}
+    .c31{grid-area:1/3}.c32{grid-area:2/3}.c33{grid-area:3/3}
+
+    /* a little played chain */
+    .chain{display:flex;align-items:center;justify-content:center;gap:3px;background:var(--felt-dark);
+      border-radius:10px;padding:14px 8px;margin-bottom:11px;flex-wrap:wrap}
+
+    /* ----- LOBBY mockup ----- */
+    .qp-btn{background:var(--gold-bright);color:var(--text-dark);border-radius:16px;padding:18px 14px;text-align:center;
+      box-shadow:0 5px 9px rgba(0,0,0,.4);margin-bottom:12px}
+    .qp-btn .big{font-size:1.3rem;font-weight:800;letter-spacing:.5px}
+    .qp-btn .small{font-size:.78rem;opacity:.85;margin-top:3px}
+    .presence{display:flex;gap:8px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+    .pres-pill{border-radius:999px;padding:7px 13px;font-size:.82rem;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+    .pres-search{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#d9d9d9}
+    .pres-play{background:rgba(76,175,80,.18);border:1px solid var(--success);color:#bdf0c2}
+    .pres-play .dot{width:8px;height:8px;border-radius:50%;background:var(--success);animation:pulse 1.8s infinite}
+    .nav-btn{background:var(--card);border:1px solid var(--card-light);border-radius:12px;padding:13px 14px;
+      font-weight:600;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .nav-btn .ico{font-size:1.1rem}
+
+    /* ----- FRIENDS / RIVALS mockup ----- */
+    .friend{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .friend:last-child{border-bottom:none}
+    .avatar{width:38px;height:38px;border-radius:50%;background:var(--felt-light);display:flex;align-items:center;
+      justify-content:center;font-weight:800;color:#fff;flex:0 0 auto;position:relative;border:1px solid rgba(255,255,255,.15)}
+    .avatar .status{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;border:2px solid var(--felt)}
+    .on{background:var(--success)}.off{background:#6b6b6b}
+    .friend .meta{flex:1;min-width:0}
+    .friend .nm{font-weight:700;font-size:.96rem}
+    .friend .rec{font-size:.76rem;color:var(--gold);font-weight:600}
+    .friend .rec.off{color:var(--text-muted);font-weight:400}
+    .revancha{background:var(--gold);color:var(--text-dark);font-weight:800;border-radius:999px;
+      padding:7px 14px;font-size:.8rem;letter-spacing:.5px;flex:0 0 auto}
+    .revancha.dim{background:rgba(255,255,255,.1);color:var(--text-muted);border:1px solid rgba(255,255,255,.15)}
+
+    /* ----- CHAT mockup ----- */
+    .chat-area{flex:1;display:flex;flex-direction:column;gap:9px;padding:6px 2px 10px}
+    .bub{max-width:78%;padding:9px 13px;border-radius:16px;font-size:.92rem;font-weight:600;line-height:1.3}
+    .bub.them{background:var(--card-light);align-self:flex-start;border-bottom-left-radius:5px}
+    .bub.me{background:var(--gold);color:var(--text-dark);align-self:flex-end;border-bottom-right-radius:5px}
+    .bub .who{display:block;font-size:.68rem;font-weight:700;opacity:.7;margin-bottom:2px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
+    .chip{background:rgba(255,255,255,.1);border:1px solid var(--gold);color:var(--gold);
+      border-radius:999px;padding:8px 13px;font-size:.84rem;font-weight:700}
+    .no-type{margin-top:11px;font-size:.74rem;color:var(--text-muted);text-align:center;font-style:italic}
+
+    /* ----- BOOM mockup ----- */
+    .boom-screen{background:radial-gradient(circle at 50% 40%, #2a1e08 0%, var(--felt) 70%);align-items:center;justify-content:center}
+    .boom-wrap{text-align:center;padding:0 18px}
+    .boom-emoji{font-size:4.6rem;line-height:1;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+    .boom-title{font-size:2.9rem;font-weight:800;color:var(--gold-bright);letter-spacing:5px;margin:8px 0 2px;
+      text-shadow:0 3px 0 var(--gold-dark),0 6px 14px rgba(0,0,0,.5)}
+    .boom-sub{color:#fff;font-weight:700;font-size:1rem;margin:2px 0 18px}
+    .boom-seq{display:flex;gap:6px;justify-content:center;margin-top:6px}
+    .boom-seq .tile{transform:rotate(-4deg)}
+    .boom-seq .tile:nth-child(2){transform:rotate(3deg)}
+    .boom-seq .tile:nth-child(3){transform:rotate(-2deg)}
+    .boom-count{display:flex;gap:18px;justify-content:center;margin-top:14px;font-weight:800;color:var(--gold);font-size:1.4rem;letter-spacing:2px}
+
+    /* ----- LEADERBOARD mockup ----- */
+    .lb-tabs{display:flex;gap:7px;margin-bottom:12px}
+    .lb-tab{flex:1;text-align:center;padding:8px 4px;border-radius:999px;font-size:.78rem;font-weight:700;
+      background:var(--card);border:1px solid var(--card-light);color:var(--text-muted)}
+    .lb-tab.active{background:rgba(212,175,55,.22);border:2px solid var(--gold);color:var(--gold)}
+    .lb-row{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .lb-row:last-child{border-bottom:none}
+    .lb-rank{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:.85rem;background:rgba(255,255,255,.1);color:#fff;flex:0 0 auto}
+    .lb-rank.g1{background:var(--gold);color:var(--text-dark)}
+    .lb-rank.g2{background:#c8c8c8;color:var(--text-dark)}
+    .lb-rank.g3{background:#cd7f32;color:#fff}
+    .lb-name{flex:1;font-weight:600;font-size:.95rem}
+    .lb-val{font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
+
+    /* ---------- Closing ---------- */
+    .closing{text-align:center;margin-top:48px;padding:30px 22px;background:var(--card);
+      border:2px solid var(--gold);border-radius:18px}
+    .closing h2{color:var(--gold)}
+    .closing p{color:rgba(255,255,255,.9);max-width:540px;margin:10px auto 0;font-size:1.08rem}
+    .closing .ask{font-size:1.45rem;font-weight:800;color:#fff;margin-top:16px;letter-spacing:.4px}
+
+    /* ---------- Footer ---------- */
+    footer{text-align:center;margin-top:48px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);color:var(--text-muted);font-size:.85rem}
+    footer .ip{display:inline-flex;align-items:center;gap:8px;margin-bottom:8px}
+    footer .ip .iq{background:var(--gold);color:var(--text-dark);font-weight:800;border-radius:8px;padding:2px 8px;font-size:.8rem;letter-spacing:1px}
+    footer .url{color:var(--gold);font-weight:700}
+
+    @media(max-width:600px){
+      .wrap{padding:28px 14px 48px}
+      .hero h1{font-size:2rem}
+      h2{font-size:1.45rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- ============ HERO ============ -->
+    <div class="brandmark">
+      <div class="logo-tile">
+        <div class="ld"></div>
+        <div class="div"></div>
+        <div class="ld"></div>
+      </div>
+      <span class="name">IQ DOMINÓ</span>
+    </div>
+
+    <header class="hero">
+      <h1>Hacia dónde vamos</h1>
+      <span class="papa">Para ti, Papá &#128075;</span>
+      <p class="lede">
+        Esto es lo que ya está en el juego y lo que viene. Léelo con calma y dinos qué te parece —
+        tus ideas mandan en esta mesa.
+      </p>
+    </header>
+
+    <!-- ============ DÓNDE ESTAMOS ============ -->
+    <section>
+      <div class="sec-head"><span class="kicker">Dónde estamos</span></div>
+      <h2>La mesa sigue llena &#127919;</h2>
+      <p class="sec-sub">
+        Estamos en el iPhone y en Android. Paramos los anuncios para ver si la gente seguía jugando sola —
+        y sí: <b>el grupo de siempre no se ha movido</b>. Hay buena gente jugando todos los días,
+        y muy fuerte en Cuba (la familia de La Habana le ha cogido el gusto).
+      </p>
+
+      <div class="stat-strip">
+        <div class="stat"><span class="num">~35</span><span class="lbl">jugadores en línea al día</span></div>
+        <div class="stat"><span class="num">~130</span><span class="lbl">partidas en línea al día</span></div>
+        <div class="stat"><span class="num">~150</span><span class="lbl">parejas de rivales al día</span></div>
+        <div class="stat"><span class="num">~1,200</span><span class="lbl">manos jugadas al día</span></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <p>
+          Son cerca de <b>50 jugadores fijos</b> que vuelven una y otra vez — esos son el corazón de la mesa.
+          La base es sólida; ahora toca hacerla más sabrosa para que jugar con tu gente sea aún mejor.
+        </p>
+        <span class="live-pill"><span class="dot"></span> Gente jugando ahora mismo</span>
+      </div>
+    </section>
+
+    <!-- ============ YA LANZAMOS (v2.5.4) ============ -->
+    <section>
+      <div class="sec-head"><span class="kicker">Ya lanzamos &#183; v2.5.4</span></div>
+      <h2>Lo que acabamos de soltar</h2>
+      <p class="sec-sub">Tres cosas nuevas, ya en el teléfono de todos.</p>
+
+      <div class="bullets three">
+        <div class="bullet">
+          <span class="emoji">&#128064;</span>
+          <h3>Se ve quién juega ahora</h3>
+          <p>La sala muestra cuántos están <b>jugando en este momento</b>, no solo buscando. La mesa nunca se ve vacía.</p>
+        </div>
+        <div class="bullet">
+          <span class="emoji">&#127757;</span>
+          <h3>Mejor con rivales lejos</h3>
+          <p>Si el rival está lejos y va lento, el tablero <b>lo espera</b> en vez de trabarse. Juego más parejo.</p>
+        </div>
+        <div class="bullet">
+          <span class="emoji">&#9889;</span>
+          <h3>Más liviano en internet lento</h3>
+          <p>Conexiones más ligeras y rápidas — <b>perfecto para Cuba</b> y cualquier red floja.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MOCKUP: LOBBY ============ -->
+    <figure class="mock">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span class="right">&#128246; &#128268; &#9745;</span></div>
+          <div class="scr-pad">
+            <div class="scr-title">JUGAR EN LÍNEA</div>
+            <p class="scr-sub">en línea &#183; busca rival al instante</p>
+
+            <div class="presence">
+              <span class="pres-pill pres-search">&#128269; 0 buscando</span>
+              <span class="pres-pill pres-play"><span class="dot"></span> 6 jugando ahora</span>
+            </div>
+
+            <div class="qp-btn">
+              <div class="big">&#9889; Jugar Ya</div>
+              <div class="small">salta a un humano cuando entre</div>
+            </div>
+
+            <div class="nav-btn"><span class="ico">&#128101;</span> Invita a un Amigo</div>
+            <div class="nav-btn"><span class="ico">&#127942;</span> Mesa familiar</div>
+            <div class="nav-btn"><span class="ico">&#129302;</span> Jugar con la máquina</div>
+          </div>
+        </div>
+      </div>
+      <figcaption>La sala: ahora dice <b>“0 buscando &#183; 6 jugando ahora”</b> — siempre se ve viva.</figcaption>
+    </figure>
+
+    <!-- ============ LO QUE VIENE (v2.6) ============ -->
+    <section>
+      <div class="sec-head"><span class="kicker">Lo que viene &#183; v2.6</span></div>
+      <h2>La primera capa social</h2>
+      <p class="sec-sub">Tu gente, tus rivalidades, y una forma simpática de hablar en la mesa.</p>
+
+      <div class="card">
+        <h3>&#128483;&#65039; Lista de amigos &mdash; “tu rival está en línea”</h3>
+        <p>
+          Ve a tus rivales, quién está conectado, y tu récord <b>mano a mano</b>
+          (“Le ganaste 4 seguidas a Tío Pedro”). Los retas a la <b>revancha</b> con un toque.
+        </p>
+      </div>
+
+      <div class="card card--gold">
+        <div style="margin-bottom:8px"><span class="papa-badge">&#128161; Idea de Papá</span></div>
+        <h3>Chat con frases listas</h3>
+        <p>
+          Hablar en la mesa <b>tocando frases ya hechas</b> — sin escribir nada. Así se mantiene
+          sano y para toda la familia (como los mensajes que ya trae la app de Uber).
+          Frases como <i>“¡Pégala!”, “¡Capicúa!”, “Buena jugada”, “Me tranqué”, “Dale, socio”, “¡Pollona!”</i>.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>&#128274; Entrar (opcional) para guardar tu progreso</h3>
+        <p>
+          Si quieres, te identificas para <b>guardar tu progreso y tus rivalidades</b> aunque cambies de teléfono.
+          Totalmente opcional — quien no quiera, sigue jugando igual.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ MOCKUPS: FRIENDS + CHAT ============ -->
+    <div class="mock-row two">
+
+      <!-- FRIENDS / RIVALS -->
+      <figure class="mock">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="statusbar"><span>9:41</span><span class="right">&#128246; &#128268; &#9745;</span></div>
+            <div class="scr-pad">
+              <div class="scr-title">MIS RIVALES</div>
+              <p class="scr-sub">rétalos a la revancha</p>
+
+              <div class="ui-card">
+                <div class="friend">
+                  <div class="avatar">P<span class="status on"></span></div>
+                  <div class="meta">
+                    <div class="nm">Tío Pedro</div>
+                    <div class="rec">Le ganaste 4 seguidas</div>
+                  </div>
+                  <span class="revancha">Revancha</span>
+                </div>
+                <div class="friend">
+                  <div class="avatar">M<span class="status on"></span></div>
+                  <div class="meta">
+                    <div class="nm">Maykel</div>
+                    <div class="rec">Serie 3&ndash;2 a favor</div>
+                  </div>
+                  <span class="revancha">Revancha</span>
+                </div>
+                <div class="friend">
+                  <div class="avatar">Y<span class="status off"></span></div>
+                  <div class="meta">
+                    <div class="nm">Yusniel</div>
+                    <div class="rec off">desconectado &#183; última: ayer</div>
+                  </div>
+                  <span class="revancha dim">Esperar</span>
+                </div>
+                <div class="friend">
+                  <div class="avatar">A<span class="status on"></span></div>
+                  <div class="meta">
+                    <div class="nm">Abuela</div>
+                    <div class="rec">Te ganó 2 seguidas &#128514;</div>
+                  </div>
+                  <span class="revancha">Revancha</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption>Tus rivales con punto verde de “en línea”, el récord <b>mano a mano</b> y el botón <b>Revancha</b>.</figcaption>
+      </figure>
+
+      <!-- CHAT (Idea de Papá) -->
+      <figure class="mock">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="statusbar"><span>9:41</span><span class="right">&#128246; &#128268; &#9745;</span></div>
+            <div class="scr-pad">
+              <div style="text-align:center;margin-bottom:6px"><span class="papa-badge">&#128161; Idea de Papá</span></div>
+              <div class="scr-title" style="font-size:1.05rem;margin-top:4px">CHAT DE LA MESA</div>
+
+              <div class="chat-area">
+                <div class="bub them"><span class="who">Tío Pedro</span>¡Pégala, socio!</div>
+                <div class="bub me">¡Capicúa! &#127919;</div>
+                <div class="bub them"><span class="who">Tío Pedro</span>Me tranqué &#128556;</div>
+                <div class="bub me">Buena jugada</div>
+              </div>
+
+              <div class="chips">
+                <span class="chip">¡Pégala!</span>
+                <span class="chip">¡Capicúa!</span>
+                <span class="chip">Buena jugada</span>
+                <span class="chip">Me tranqué</span>
+                <span class="chip">Dale, socio</span>
+                <span class="chip">¡Pollona! &#128020;</span>
+              </div>
+              <p class="no-type">Solo frases listas &#183; sin teclado &#183; sano para toda la familia</p>
+            </div>
+          </div>
+        </div>
+        <figcaption><b>Idea de Papá:</b> tocas la frase y se manda. Nada de escribir — limpio y familiar.</figcaption>
+      </figure>
+
+    </div>
+
+    <!-- ============ MÁS ADELANTE ============ -->
+    <section>
+      <div class="sec-head"><span class="kicker">Más adelante</span></div>
+      <h2>A medida que crezca la comunidad</h2>
+      <p class="sec-sub">Ideas para cuando haya más gente en la mesa.</p>
+
+      <div class="bullets three">
+        <div class="bullet">
+          <span class="emoji">&#128165;</span>
+          <h3>BOOM / ¡PEGA'O!</h3>
+          <p>Cuando cierras solo soltando tus últimas fichas <b>una-dos-tres</b>, la pantalla lo celebra a lo grande.</p>
+        </div>
+        <div class="bullet">
+          <span class="emoji">&#127942;</span>
+          <h3>Tabla de líderes</h3>
+          <p>Quién manda: <b>Más Pollonas</b>, <b>Racha más larga</b> y <b>Más Capicúas</b>.</p>
+        </div>
+        <div class="bullet">
+          <span class="emoji">&#129309;</span>
+          <h3>La mesa 2v2</h3>
+          <p>Juego en <b>pareja</b>, cuatro a la mesa — la verdadera mesa cubana, tú y tu socio contra los otros dos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MOCKUPS: BOOM + LEADERBOARD ============ -->
+    <div class="mock-row two">
+
+      <!-- BOOM -->
+      <figure class="mock">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen boom-screen">
+            <div class="statusbar"><span>9:41</span><span class="right">&#128246; &#128268; &#9745;</span></div>
+            <div class="boom-wrap">
+              <div class="boom-emoji">&#128165;</div>
+              <div class="boom-title">¡PEGA'O!</div>
+              <div class="boom-sub">Cerraste solo &#183; una-dos-tres</div>
+              <div class="boom-seq">
+                <div class="tile">
+                  <div class="half"><span class="p c22"></span></div>
+                  <div class="divh"></div>
+                  <div class="half"><span class="p c11"></span><span class="p c33"></span></div>
+                </div>
+                <div class="tile">
+                  <div class="half"><span class="p c11"></span><span class="p c33"></span></div>
+                  <div class="divh"></div>
+                  <div class="half"><span class="p c11"></span><span class="p c22"></span><span class="p c33"></span></div>
+                </div>
+                <div class="tile">
+                  <div class="half"><span class="p c11"></span><span class="p c13"></span><span class="p c31"></span><span class="p c33"></span></div>
+                  <div class="divh"></div>
+                  <div class="half"><span class="p c22"></span></div>
+                </div>
+              </div>
+              <div class="boom-count">1 &#183; 2 &#183; 3</div>
+            </div>
+          </div>
+        </div>
+        <figcaption>El momento <b>BOOM / ¡PEGA'O!</b>: sueltas tus últimas fichas y cierras a lo cubano.</figcaption>
+      </figure>
+
+      <!-- LEADERBOARD -->
+      <figure class="mock">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="statusbar"><span>9:41</span><span class="right">&#128246; &#128268; &#9745;</span></div>
+            <div class="scr-pad">
+              <div class="scr-title">TABLA DE LÍDERES</div>
+              <p class="scr-sub">los que mandan en la mesa</p>
+
+              <div class="lb-tabs">
+                <span class="lb-tab active">Más Pollonas</span>
+                <span class="lb-tab">Racha</span>
+                <span class="lb-tab">Capicúas</span>
+              </div>
+
+              <div class="ui-card">
+                <div class="lb-row"><span class="lb-rank g1">1</span><span class="lb-name">Tío Pedro</span><span class="lb-val">18 &#128020;</span></div>
+                <div class="lb-row"><span class="lb-rank g2">2</span><span class="lb-name">Maykel</span><span class="lb-val">15 &#128020;</span></div>
+                <div class="lb-row"><span class="lb-rank g3">3</span><span class="lb-name">Abuela</span><span class="lb-val">12 &#128020;</span></div>
+                <div class="lb-row"><span class="lb-rank">4</span><span class="lb-name">Yusniel</span><span class="lb-val">9 &#128020;</span></div>
+                <div class="lb-row"><span class="lb-rank">5</span><span class="lb-name">Tú</span><span class="lb-val">7 &#128020;</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption>La tabla: <b>Más Pollonas</b>, <b>Racha más larga</b> y <b>Más Capicúas</b> — para picarse en familia.</figcaption>
+      </figure>
+
+    </div>
+
+    <!-- ============ CIERRE ============ -->
+    <section class="closing">
+      <h2>Tu turno, Papá</h2>
+      <p>
+        Todo esto sale de lo que vimos en la mesa y de lo que tú nos has dicho —
+        el chat de frases listas es idea tuya. Dinos qué te gusta, qué le falta,
+        y qué frase tenemos que poner sí o sí.
+      </p>
+      <div class="ask">¿Qué te parece, Papá? Dinos tus ideas.</div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+      <div class="ip"><span class="iq">IQ</span> <span class="url">iqdominoes.com</span></div>
+      <div>Hecho con cariño para la familia &#183; &copy; 2026 Global Data and Consulting Solutions, LLC</div>
+    </footer>
+
+  </div>
+</body>
+</html>
