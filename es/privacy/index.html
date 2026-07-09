@@ -13,7 +13,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="IQ Dominó" />
   <meta property="og:title" content="Política de Privacidad | IQ Dominó" />
-  <meta property="og:description" content="Qué datos recoge IQ Dominó, por qué, y cómo se manejan." />
+  <meta property="og:description" content="Qué datos recoge IQ Dominó, por qué, y cómo se manejan. Actualizado 2026-07-08." />
   <meta property="og:url" content="https://www.iqdominoes.com/es/privacy/" />
   <meta property="og:locale" content="es_ES" />
   <meta property="og:locale:alternate" content="en_US" />
@@ -32,7 +32,7 @@
 <body>
   <div class="wrap">
     <h1>Política de Privacidad</h1>
-    <p class="muted">Última actualización: 2026-06-02</p>
+    <p class="muted">Última actualización: 2026-07-08</p>
 
     <div class="card">
       <p>Global Data and Consulting Solutions, LLC ("GDACS", "nosotros") publica la aplicación móvil IQ Dominó ("la Aplicación"). Esta política explica qué datos recoge la Aplicación, por qué, y cómo se manejan.</p>
@@ -48,10 +48,19 @@
       <p><strong>Diagnósticos de fallos.</strong> Usamos Sentry (<a href="https://sentry.io">sentry.io</a>) para capturar información sobre fallos &mdash; trazas de pila, versión de la Aplicación, modelo del dispositivo y versión del sistema operativo. Esto nos ayuda a corregir errores. Los datos de fallos no incluyen tu nombre de pantalla ni el contenido de la partida. Hemos configurado Sentry para que <strong>no</strong> adjunte direcciones IP a los informes de fallos (<code>sendDefaultPii: false</code>).</p>
       <p><strong>Reportes.</strong> Si usas la opción de Reportar dentro de la Aplicación después de una partida, recogemos el nombre de pantalla del jugador reportado, el ID de la partida, y cualquier razón que decidas escribir (hasta 500 caracteres). Estos datos quedan registrados en nuestro servidor para revisión de moderación. No registramos tu nombre de pantalla cuando envías un reporte; solamente queda registrado tu identificador de sesión temporal.</p>
       <p><strong>Tokens de notificaciones push.</strong> Si aceptas notificaciones, enviamos tu token Expo Push, zona horaria del dispositivo (IANA), idioma y preferencias a nuestro servidor, donde se guardan en Upstash Redis hasta 90 días. Solo se usan para enviarte avisos de partidas, recordatorios de racha y notificaciones de lobby que tú hayas activado. Caducan automáticamente si no abres la Aplicación en 90 días.</p>
-      <p><strong>Datos de racha.</strong> Para los recordatorios diarios, guardamos en el servidor tu racha actual, fecha del último juego (en tu zona horaria local) y zona horaria, por hasta 90 días tras tu última partida. Solo se asocian a tu identificador de sesión temporal.</p>
+      <p><strong>Estadísticas de juego (en el servidor, con ID de instalación en el dispositivo).</strong> Para mantener tu progreso consistente entre sesiones, nuestro servidor guarda un pequeño registro de actividad vinculado a un identificador de instalación aleatorio generado por la Aplicación (un UUID creado en tu dispositivo la primera vez que juegas &mdash; no vinculado a ninguna identidad personal). Este registro guarda conteos y fechas como partidas completadas, fecha de última actividad, tu racha diaria y fecha de la última partida, tu puntuación de habilidad (ELO) por modo de juego, y los identificadores anonimizados de tus compañeros de partida más recientes. Se usa para los recordatorios de racha, el emparejamiento por nivel de habilidad y las notificaciones de reenganche. Este registro caduca automáticamente 90 días después de tu última sesión.</p>
+      <p><strong>Lista de jugadores bloqueados (en el servidor).</strong> Si bloqueas a otro jugador, guardamos esa elección en nuestro servidor vinculada a tu identificador de instalación para que el bloqueo se aplique en futuras partidas. La lista solo contiene los identificadores de instalación de los jugadores bloqueados, no nombres ni ninguna información personal.</p>
       <p><strong>Referidos (Mesa Maker).</strong> Cuando tocas un enlace de invitación, guardamos en tu dispositivo el nombre saneado del invitador (letras minúsculas y dígitos, hasta 16 caracteres) y lo enviamos al servidor una vez en tu primera partida para acreditar su contador "Mesa Maker". Los contadores se mantienen mientras la Aplicación esté en servicio.</p>
       <p><strong>Códigos de mesa familiar.</strong> Un código de mesa familiar que crees se guarda en tu dispositivo y se registra en el servidor mientras esté activo para que otros jugadores puedan unirse.</p>
       <p><strong>Procesadores del servidor.</strong> Los datos persistentes anteriores se guardan en Upstash, Inc. (EE.UU.). El envío de notificaciones usa Expo Application Services (EAS) operado por 650 Industries, Inc.</p>
+    </div>
+
+    <div class="card">
+      <h2>Inicio de sesión opcional y amigos</h2>
+      <p>La Aplicación no requiere una cuenta. Si eliges iniciar sesión con <strong>Sign in with Apple</strong> o <strong>Sign in with Google</strong> &mdash; una función opcional que te permite conservar tus amigos y tu progreso si cambias de dispositivo &mdash; se aplica lo siguiente. Si nunca inicias sesión, ninguno de los datos de esta sección se recoge.</p>
+      <p><strong>Inicio de sesión con Apple / Google.</strong> Cuando inicias sesión, Apple o Google nos envía un token de inicio de sesión firmado que incluye tu dirección de correo electrónico. Usamos tu correo únicamente para reconocer tu cuenta entre dispositivos. <strong>Nunca guardamos tu dirección de correo electrónico en texto plano.</strong> En nuestro servidor la convertimos de inmediato en un hash unidireccional, irreversible y con sal, y guardamos solo ese hash &mdash; no podemos recuperar tu correo a partir de él. También guardamos el identificador de cuenta opaco del proveedor de inicio de sesión para poder reconocerte si cambias de correo. Si usas la función "Hide My Email" de Apple, funciona con normalidad &mdash; nosotros solo vemos el valor con hash.</p>
+      <p><strong>Amigos.</strong> Si agregas amigos, guardamos una lista de amigos en nuestro servidor para que puedan invitarse mutuamente a partidas y jugar 2 contra 2. La lista contiene solamente identificadores de instalación anónimos &mdash; no nombres, correos ni contactos. Nunca accedemos a los contactos de tu teléfono.</p>
+      <p><strong>Eliminar tu cuenta.</strong> Si inicias sesión, la Aplicación ofrece una opción de <strong>Eliminar Cuenta</strong> en Ajustes. Al elegirla se elimina permanentemente tu cuenta y todo lo vinculado a ella &mdash; el correo con hash, el identificador del proveedor de inicio de sesión, tu lista de amigos, tu lista de jugadores bloqueados y tus estadísticas de juego (racha, puntuación de habilidad y registro de actividad) &mdash; de nuestro servidor y de su procesador (Upstash). Esto cumple con el requisito de eliminación de cuenta de Apple (Directriz 5.1.1(v) de la revisión de App Store).</p>
     </div>
 
     <div class="card">
@@ -66,7 +75,7 @@
     <div class="card">
       <h2>Lo que NO recogemos</h2>
       <ul>
-        <li>Nombre real, correo electrónico, número de teléfono o información de contacto</li>
+        <li>Tu nombre real, número de teléfono o contactos (si inicias sesión, guardamos solo un <em>hash</em> unidireccional de tu correo, nunca el correo en sí &mdash; consulta "Inicio de sesión opcional y amigos")</li>
         <li>Datos de ubicación de ningún tipo</li>
         <li>Fotos, videos, audio, contactos, archivos o documentos</li>
         <li>Información financiera o datos de pago</li>
@@ -85,6 +94,7 @@
         <li>Upstash, Inc. &mdash; almacenamiento Redis para tokens push / rachas (<a href="https://upstash.com/trust">Confianza y Privacidad</a>)</li>
         <li>650 Industries, Inc. (Expo / EAS) &mdash; envío de notificaciones push (<a href="https://expo.dev/privacy">Privacidad</a>)</li>
         <li>Meta Platforms, Inc. y AppsFlyer Inc. &mdash; atribución publicitaria (enlazados arriba)</li>
+        <li>Apple Inc. y Google LLC &mdash; proveedores de identidad, solo si eliges usar Sign in with Apple o Sign in with Google (<a href="https://www.apple.com/legal/privacy/">Apple Privacy</a> &middot; <a href="https://policies.google.com/privacy">Google Privacy</a>)</li>
       </ul>
     </div>
 
@@ -93,7 +103,7 @@
       <p>Para usuarios en la UE/EEE y el Reino Unido, nos basamos en los siguientes fundamentos legales conforme al Artículo 6(1) del RGPD:</p>
       <ul>
         <li><strong>Intereses legítimos (Art. 6(1)(f)):</strong> analíticas de producto anónimas (PostHog), diagnósticos de fallos con los datos personales eliminados (Sentry), gestión de abuso/moderación (reportes de jugadores) y atribución publicitaria / medición del rendimiento de anuncios &mdash; que en Android incluye el Identificador de Publicidad de Android, y en iOS usa SKAdNetwork de Apple / señales agregadas &mdash; para operar, asegurar, depurar, mejorar y promocionar la Aplicación.</li>
-        <li><strong>Ejecución de un servicio que solicitas (Art. 6(1)(b)):</strong> emparejamiento y coordinación del juego en línea, notificaciones push que tú actives, recordatorios de racha diaria y códigos de mesa familiar.</li>
+        <li><strong>Ejecución de un servicio que solicitas (Art. 6(1)(b)):</strong> emparejamiento y coordinación del juego en línea, notificaciones push que tú actives, recordatorios de racha diaria, códigos de mesa familiar y &mdash; si decides iniciar sesión &mdash; el inicio de sesión de tu cuenta y la función de amigos.</li>
         <li><strong>Consentimiento (Art. 6(1)(a)):</strong> cuando corresponda, p. ej. al activar las notificaciones push. Puedes retirar tu consentimiento en cualquier momento mediante Ajustes &rarr; interruptor de Analíticas e Informes de Errores dentro de la Aplicación, o desde los ajustes de notificaciones de tu dispositivo.</li>
       </ul>
       <p>En Android, el identificador publicitario se recoge y se comparte con nuestros socios de atribución para medir nuestra propia publicidad. En iOS, no se recoge ningún IDFA y no se muestra ningún aviso de Transparencia de Seguimiento de Aplicaciones. Puedes restablecer o limitar el identificador publicitario en los ajustes de anuncios de tu dispositivo en cualquier momento.</p>
@@ -118,8 +128,9 @@
 
     <div class="card">
       <h2 id="data-deletion">Eliminación de datos</h2>
+      <p><strong>Si iniciaste sesión:</strong> la forma más rápida de eliminar todo es la opción <strong>Eliminar Cuenta</strong> en los Ajustes de la Aplicación. Elimina de inmediato y de forma permanente tu cuenta y todos los datos vinculados de nuestro servidor.</p>
       <p><strong>Cómo solicitar la eliminación:</strong> escríbenos a <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> con tu <strong>nombre de pantalla</strong> y las fechas aproximadas en que jugaste. No se requiere cuenta. Respondemos en un plazo de <strong>30 días</strong>.</p>
-      <p><strong>Qué eliminamos:</strong> tu token de notificaciones push, registro de racha diaria, contador de referidos Mesa Maker, códigos de mesa familiar, registro de interacción por instalación, y cualquier reporte de moderación vinculado a tus sesiones &mdash; de nuestros servidores y de nuestros procesadores (Upstash, Expo). También instruimos a nuestros socios de publicidad y analítica (AppsFlyer, Meta, Google, PostHog) para que eliminen los datos asociados a tu identificador de dispositivo / publicitario cuando sus sistemas admitan solicitudes de eliminación.</p>
+      <p><strong>Qué eliminamos:</strong> tu token de notificaciones push, registro de racha diaria, puntuación de habilidad, registro de interacción por instalación, lista de jugadores bloqueados, contador de referidos Mesa Maker, códigos de mesa familiar, cualquier reporte de moderación vinculado a tus sesiones y &mdash; si iniciaste sesión &mdash; tu correo con hash, identificadores de inicio de sesión y lista de amigos &mdash; de nuestros servidores y de nuestros procesadores (Upstash, Expo). También instruimos a nuestros socios de publicidad y analítica (AppsFlyer, Meta, Google, PostHog) para que eliminen los datos asociados a tu identificador de dispositivo / publicitario cuando sus sistemas admitan solicitudes de eliminación.</p>
       <p><strong>Qué conservamos:</strong> estadísticas agregadas y no identificativas de analítica y fallos que no pueden vincularse a ti, y los registros que estamos legalmente obligados a conservar. Los datos en el dispositivo (nombre de pantalla, historial de rivales, marca de confirmación de edad) se eliminan al desinstalar la Aplicación.</p>
       <p>La mayoría de los datos del servidor también caducan por sí solos &mdash; los tokens push, las rachas y los registros de interacción se eliminan 90 días después de tu última sesión.</p>
     </div>

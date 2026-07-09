@@ -15,7 +15,7 @@
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="IQ Dominoes" />
   <meta property="og:title" content="Privacy Policy | IQ Dominoes" />
-  <meta property="og:description" content="What data IQ Dominoes collects, why, and how it is handled. Updated 2026-05-22." />
+  <meta property="og:description" content="What data IQ Dominoes collects, why, and how it is handled. Updated 2026-07-08." />
   <meta property="og:url" content="https://www.iqdominoes.com/privacy/" />
   <meta property="og:image" content="https://www.iqdominoes.com/assets/og-image.png" />
   <meta property="og:locale" content="en_US" />
@@ -38,7 +38,7 @@
 <body>
   <div class="wrap">
     <h1>Privacy Policy</h1>
-    <p class="muted">Last updated: 2026-06-02</p>
+    <p class="muted">Last updated: 2026-07-08</p>
 
     <div class="card">
       <p>Global Data and Consulting Solutions, LLC ("GDACS", "we") publishes the IQ Dominoes mobile application ("the App"). This policy explains what data the App collects, why, and how it is handled.</p>
@@ -54,10 +54,19 @@
       <p><strong>Crash diagnostics.</strong> We use Sentry (<a href="https://sentry.io">sentry.io</a>) to capture information about crashes &mdash; stack traces, app version, device model, and OS version. This helps us fix bugs. Crash data does not include your display name or game contents. We have configured Sentry to <strong>not</strong> attach IP addresses to crash reports (<code>sendDefaultPii: false</code>).</p>
       <p><strong>Reports.</strong> If you use the in-app Report option after a match, we collect the reported player's display name, the match ID, and any reason text you choose to provide (up to 500 characters). This data is logged on our server for moderation review. We do not log your display name when you submit a report; only your temporary session identifier is recorded.</p>
       <p><strong>Push notification tokens.</strong> If you opt in to push notifications, we send your Expo Push token, device timezone (IANA, e.g. "America/New_York"), language, and notification preferences to our server, where they are stored in Upstash Redis with a 90-day expiration. Tokens are used only to send match alerts, streak reminders, and lobby notifications you have enabled. They auto-expire if you do not reopen the App within 90 days.</p>
-      <p><strong>Streak data.</strong> To power daily-streak reminders, we store your current streak count, last-played date (in your local timezone), and timezone on our server for up to 90 days after your last match. This data is keyed only to your temporary session identifier.</p>
+      <p><strong>Gameplay stats (server-side, on-device install ID).</strong> To keep your progress consistent across sessions, our server stores a small engagement record keyed to a random, app-generated install identifier (a UUID created on your device the first time you play &mdash; not linked to any personal identity). This record holds counts and dates such as matches completed, last-active date, your daily-streak count and last-played date, your per-game-mode skill rating (ELO), and the anonymized identifiers of your few most recent co-players. It is used to power streak reminders, skill-based matchmaking, and re-engagement notifications. This record auto-expires 90 days after your last session.</p>
+      <p><strong>Blocked-players list (server-side).</strong> If you block another player, we store that choice on our server keyed to your install identifier so the block is enforced in future matches. The list holds only the blocked players' install identifiers, not names or any personal information.</p>
       <p><strong>Referrals (Mesa Maker).</strong> When you tap an invite link, we store the inviter's sanitized display name (lowercase letters/digits, up to 16 characters) on your device and send it to our server once on your first match so we can credit the inviter's "Mesa Maker" tally. Tallies are keyed to the sanitized display name and retained while the App remains in service.</p>
       <p><strong>Family room codes.</strong> A family-room code you create is stored on your device and registered server-side while the code is active so other players can join using it.</p>
       <p><strong>Server processors.</strong> Persistent data above is stored at Upstash, Inc. (US). Push delivery uses Expo Application Services (EAS) operated by 650 Industries, Inc.</p>
+    </div>
+
+    <div class="card">
+      <h2>Optional Sign-In &amp; Friends</h2>
+      <p>The App does not require an account. If you choose to sign in with <strong>Sign in with Apple</strong> or <strong>Sign in with Google</strong> &mdash; an optional feature that lets you keep your friends and progress if you switch devices &mdash; the following applies. If you never sign in, none of the data in this section is collected.</p>
+      <p><strong>Sign in with Apple / Google.</strong> When you sign in, Apple or Google sends us a signed sign-in token that includes your email address. We use your email only to recognize your account across devices. <strong>We never store your raw email address.</strong> On our server we immediately convert it into an irreversible, salted one-way hash and store only that hash &mdash; we cannot read your email back from it. We also store the sign-in provider's opaque account identifier so we can recognize you if you change your email. If you use Apple's "Hide My Email" private-relay feature, that works normally &mdash; we only ever see the hashed value.</p>
+      <p><strong>Friends.</strong> If you add friends, we store a friends list on our server so you can invite each other to games and play 2-vs-2. The list contains only anonymous install identifiers &mdash; not names, emails, or contacts. We never access your phone's contacts.</p>
+      <p><strong>Deleting your account.</strong> If you sign in, the App offers a <strong>Delete Account</strong> option in Settings. Choosing it permanently removes your account and everything linked to it &mdash; the hashed email, the sign-in provider identifier, your friends list, your blocked-players list, and your gameplay stats (streak, skill rating, and engagement record) &mdash; from our server and its processor (Upstash). This satisfies Apple's account-deletion requirement (App Store Review Guideline 5.1.1(v)).</p>
     </div>
 
     <div class="card">
@@ -72,7 +81,7 @@
     <div class="card">
       <h2>What We Do NOT Collect</h2>
       <ul>
-        <li>Real name, email, phone number, or contact information</li>
+        <li>Your real name, phone number, or contacts (if you sign in, we store only a one-way <em>hash</em> of your email, never the email itself &mdash; see "Optional Sign-In &amp; Friends")</li>
         <li>Location data of any kind</li>
         <li>Photos, videos, audio, contacts, files, or documents</li>
         <li>Financial information or payment data</li>
@@ -91,6 +100,7 @@
         <li>Upstash, Inc. &mdash; Redis storage for push tokens / streaks (<a href="https://upstash.com/trust">Trust &amp; Privacy</a>)</li>
         <li>650 Industries, Inc. (Expo / EAS) &mdash; push notification delivery (<a href="https://expo.dev/privacy">Privacy</a>)</li>
         <li>Meta Platforms, Inc. and AppsFlyer Inc. &mdash; advertising attribution (linked above)</li>
+        <li>Apple Inc. and Google LLC &mdash; identity providers, only if you choose to use Sign in with Apple or Sign in with Google (<a href="https://www.apple.com/legal/privacy/">Apple Privacy</a> &middot; <a href="https://policies.google.com/privacy">Google Privacy</a>)</li>
       </ul>
     </div>
 
@@ -99,7 +109,7 @@
       <p>For users in the EU/EEA and UK, we rely on the following lawful bases under Article 6(1) of the GDPR:</p>
       <ul>
         <li><strong>Legitimate interests (Art. 6(1)(f)):</strong> anonymous product analytics (PostHog), crash diagnostics with personal data stripped (Sentry), abuse/moderation handling (player reports), and advertising attribution / ad-performance measurement &mdash; which on Android includes the Android Advertising ID, and on iOS uses Apple SKAdNetwork / aggregated signals &mdash; to operate, secure, debug, improve, and promote the App.</li>
-        <li><strong>Performance of a service you request (Art. 6(1)(b)):</strong> matchmaking and online-play coordination, push notifications you opt into, daily-streak reminders, and family-room codes.</li>
+        <li><strong>Performance of a service you request (Art. 6(1)(b)):</strong> matchmaking and online-play coordination, push notifications you opt into, daily-streak reminders, family-room codes, and &mdash; if you choose to sign in &mdash; account sign-in and the friends feature.</li>
         <li><strong>Consent (Art. 6(1)(a)):</strong> where applicable, e.g. enabling push notifications. You can withdraw consent at any time via the in-app Settings &rarr; Analytics &amp; Crash Reports toggle or your device notification settings.</li>
       </ul>
       <p>On Android, the advertising identifier is collected and shared with our attribution partners to measure our own advertising. On iOS, no IDFA is collected and no App Tracking Transparency prompt is shown. You can reset or limit the advertising identifier in your device's ad settings at any time.</p>
@@ -124,8 +134,9 @@
 
     <div class="card">
       <h2 id="data-deletion">Data Deletion</h2>
-      <p><strong>How to request deletion:</strong> email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> with your in-app <strong>display name</strong> and the approximate dates you played. No account is required. We respond within <strong>30 days</strong>.</p>
-      <p><strong>What we delete:</strong> your push-notification token, daily-streak record, Mesa Maker referral tally, family-room codes, per-install engagement record, and any moderation reports tied to your sessions &mdash; from our servers and our processors (Upstash, Expo). We also instruct our advertising and analytics partners (AppsFlyer, Meta, Google, PostHog) to delete data associated with your device / advertising identifier where their systems support deletion requests.</p>
+      <p><strong>If you signed in:</strong> the fastest way to delete everything is the <strong>Delete Account</strong> option in the App's Settings. It immediately and permanently removes your account and all linked data (see "Optional Sign-In &amp; Friends") from our server.</p>
+      <p><strong>How to request deletion by email:</strong> email <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a> with your in-app <strong>display name</strong> and the approximate dates you played. No account is required. We respond within <strong>30 days</strong>.</p>
+      <p><strong>What we delete:</strong> your push-notification token, daily-streak record, skill rating, per-install engagement record, blocked-players list, Mesa Maker referral tally, family-room codes, any moderation reports tied to your sessions, and &mdash; if you signed in &mdash; your hashed email, sign-in identifiers, and friends list &mdash; from our servers and our processors (Upstash, Expo). We also instruct our advertising and analytics partners (AppsFlyer, Meta, Google, PostHog) to delete data associated with your device / advertising identifier where their systems support deletion requests.</p>
       <p><strong>What is kept:</strong> aggregated, non-identifying analytics and crash statistics that cannot be linked back to you, plus any records we are legally required to retain. On-device data (display name, opponent history, age-confirmation flag) is removed when you uninstall the App.</p>
       <p>Most server data also auto-expires on its own &mdash; push tokens, streaks, and engagement records are deleted 90 days after your last session.</p>
     </div>
