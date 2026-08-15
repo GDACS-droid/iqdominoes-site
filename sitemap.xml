@@ -65,6 +65,12 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.iqdominoes.com/terms/" />
   </url>
   <url>
+    <loc>https://www.iqdominoes.com/torneo/</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.iqdominoes.com/es/</loc>
     <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>

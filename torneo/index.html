@@ -1,0 +1,537 @@
+<!doctype html>
+<!--
+  /torneo/  —  El Torneo I hub page. Fixes a live 404 (the shipped app already
+  links here from the in-app "Torneo" tab). Deliberately its own visual
+  identity vs. the rest of the site (black lacquer / oxblood / brass / one
+  restrained teal accent) rather than the site-wide green/gold look — this is
+  a ceremony page, not a marketing page. No build step, all CSS inlined
+  (site convention), no external fonts/images/CDNs. Dominoes are inline SVG
+  double-nine pip tiles, not raster art. Countdown is vanilla JS progressive
+  enhancement only — all copy renders with JS off.
+-->
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>El Torneo I — IQ Dominó · Viernes 28 de agosto, 9:00 PM ET</title>
+  <meta name="description" content="El Torneo I de IQ Dominó: 16 jugadores, 4 mesas, 1 campeón. Viernes 28 de agosto, 9:00 PM ET. Abre la app y toca Avísame para asegurar tu puesto." />
+  <meta name="keywords" content="torneo IQ Dominó, torneo de dominó, dominó cubano torneo, El Torneo I, dominó en línea competencia" />
+  <meta name="author" content="Global Data and Consulting Solutions, LLC" />
+  <meta name="theme-color" content="#120c0d" />
+
+  <link rel="canonical" href="https://www.iqdominoes.com/torneo/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="IQ Dominó" />
+  <meta property="og:title" content="El Torneo I — IQ Dominó" />
+  <meta property="og:description" content="16 jugadores. 4 mesas. 1 campeón. Viernes 28 de agosto, 9:00 PM ET. La Mesa Final te espera." />
+  <meta property="og:url" content="https://www.iqdominoes.com/torneo/" />
+  <meta property="og:image" content="https://www.iqdominoes.com/assets/og-image.png" />
+  <meta property="og:image:alt" content="El Torneo I — IQ Dominó" />
+  <meta property="og:locale" content="es_ES" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="El Torneo I — IQ Dominó" />
+  <meta name="twitter:description" content="16 jugadores. 4 mesas. 1 campeón. Viernes 28 de agosto, 9:00 PM ET." />
+  <meta name="twitter:image" content="https://www.iqdominoes.com/assets/og-image.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "El Torneo I — IQ Dominó",
+    "startDate": "2026-08-28T21:00:00-04:00",
+    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location": {
+      "@type": "VirtualLocation",
+      "url": "https://www.iqdominoes.com/torneo/"
+    },
+    "description": "16 jugadores, 4 mesas, 1 campeón. El primer torneo oficial de IQ Dominó.",
+    "organizer": {
+      "@type": "Organization",
+      "name": "Global Data and Consulting Solutions, LLC",
+      "url": "https://www.iqdominoes.com/"
+    },
+    "image": "https://www.iqdominoes.com/assets/og-image.png"
+  }
+  </script>
+
+  <style>
+    :root{
+      --ink:#120c0d;
+      --ink-2:#1c1416;
+      --ink-3:#241a1c;
+      --line:rgba(240,231,213,0.10);
+      --ivory:#f2e8d5;
+      --ivory-dim:rgba(242,232,213,0.74);
+      --ivory-faint:rgba(242,232,213,0.5);
+      --garnet:#7c1023;
+      --garnet-bright:#9e1730;
+      --garnet-line:rgba(158,23,48,0.45);
+      --brass:#c7a250;
+      --brass-bright:#e0bd6c;
+      --brass-dim:#8a6d34;
+      --teal:#1f8a80;
+    }
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(ellipse 900px 500px at 50% -10%, rgba(158,23,48,0.16), transparent 60%),
+        radial-gradient(ellipse 700px 400px at 90% 10%, rgba(199,162,80,0.06), transparent 55%),
+        var(--ink);
+      color:var(--ivory);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      font-size:18px;
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+    /* Faint felt/lacquer texture, CSS-only, no images */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      opacity:0.5;
+      background-image:
+        repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 3px);
+    }
+    .wrap{max-width:760px;margin:0 auto;padding:0 20px 64px;position:relative;z-index:1}
+    a{color:var(--brass-bright)}
+    a:focus-visible, button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+
+    /* ---------- Display type: condensed impact, no external fonts ---------- */
+    .display{
+      font-family:"Arial Narrow",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      transform:scaleX(0.92);
+      transform-origin:left center;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:0.01em;
+    }
+
+    /* ---------- Top bar ---------- */
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 20px;max-width:760px;margin:0 auto;position:relative;z-index:1;
+    }
+    .brandlink{display:inline-flex;align-items:center;gap:8px;color:var(--ivory-dim);font-weight:700;font-size:0.92rem;letter-spacing:0.02em;text-decoration:none}
+    .brandlink:hover{color:var(--brass-bright)}
+    .brandlink svg{width:20px;height:20px;flex:none}
+
+    /* ---------- Hero ---------- */
+    .hero{padding:28px 0 8px;text-align:center}
+    .eyebrow{
+      display:inline-block;font-size:0.82rem;font-weight:800;letter-spacing:0.16em;
+      color:var(--brass-bright);text-transform:uppercase;margin-bottom:18px;
+    }
+    .hero-tiles{display:flex;justify-content:center;gap:10px;margin:0 0 18px}
+    .domino-tile{width:46px;height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.55))}
+    .domino-tile .tile-face{fill:var(--ink-3);stroke:var(--brass-dim);stroke-width:2}
+    .domino-tile .tile-mid{stroke:var(--brass-dim);stroke-width:1.5}
+    .domino-tile .pip{fill:var(--ivory)}
+    .domino-tile.brass-pip .pip{fill:var(--brass-bright)}
+    .domino-tile.plaque-tile .tile-face{fill:#1a1310;stroke:var(--brass-bright);stroke-width:2.5}
+    .domino-tile.plaque-tile .tile-mid{stroke:var(--brass-bright)}
+    .domino-tile.plaque-tile .pip{fill:var(--brass-bright)}
+
+    h1.title{
+      font-size:3.1rem;
+      line-height:0.98;
+      margin:0 0 14px;
+      color:var(--ivory);
+      text-shadow:0 2px 0 rgba(0,0,0,0.4);
+    }
+    h1.title .accent{color:var(--garnet-bright)}
+    .tagline{
+      font-size:1.25rem;font-style:italic;color:var(--ivory-dim);margin:0 0 20px;font-weight:400;
+    }
+    .datebar{
+      display:inline-block;
+      font-weight:800;letter-spacing:0.02em;
+      font-size:1.15rem;
+      color:var(--ink);
+      background:linear-gradient(180deg, var(--brass-bright), var(--brass));
+      padding:12px 22px;border-radius:999px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.4);
+      margin-bottom:16px;
+    }
+    .subline{color:var(--ivory-dim);font-size:1.05rem;margin:0 0 8px}
+
+    /* ---------- Countdown ---------- */
+    .countdown{
+      margin:26px auto 6px;
+      display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+      max-width:460px;
+    }
+    .countdown .cell{
+      background:rgba(0,0,0,0.28);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px 4px 12px;
+    }
+    .countdown .num{
+      display:block;font-size:1.9rem;font-weight:800;font-variant-numeric:tabular-nums;
+      color:var(--ivory);
+    }
+    .countdown .unit{display:block;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--ivory-faint);margin-top:2px}
+    .live-badge{
+      display:none;
+      align-items:center;gap:8px;justify-content:center;
+      margin:22px auto 6px;
+      background:rgba(31,138,128,0.14);
+      border:1px solid rgba(31,138,128,0.55);
+      color:#bdeee8;
+      font-weight:800;letter-spacing:0.06em;text-transform:uppercase;font-size:0.9rem;
+      padding:10px 18px;border-radius:999px;width:fit-content;
+    }
+    .live-dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(31,138,128,0.25)}
+    .live-badge.show{display:inline-flex}
+    .countdown.hide{display:none}
+
+    /* ---------- Sections ---------- */
+    section{margin-top:52px}
+    .section-head{text-align:center;margin-bottom:22px}
+    .kicker{
+      display:block;font-size:0.78rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;
+      color:var(--garnet-bright);margin-bottom:6px;
+    }
+    h2{font-size:1.7rem;margin:0;color:var(--ivory)}
+    .lede{text-align:center;color:var(--ivory-dim);max-width:520px;margin:10px auto 0}
+
+    .divider{display:flex;justify-content:center;margin:48px 0}
+    .divider .domino-tile{width:40px}
+
+    /* ---------- Steps ---------- */
+    .steps{display:flex;flex-direction:column;gap:16px}
+    .step{
+      display:flex;gap:16px;align-items:flex-start;
+      background:var(--ink-2);
+      border:1px solid var(--line);
+      border-left:3px solid var(--garnet);
+      border-radius:12px;
+      padding:18px 18px;
+    }
+    .step .domino-tile{width:38px;flex:none;margin-top:2px}
+    .step p{margin:0;color:var(--ivory-dim)}
+    .step strong{color:var(--ivory);display:block;margin-bottom:4px;font-size:1.05rem}
+
+    /* ---------- Rules ---------- */
+    .rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+    .rules li{
+      background:var(--ink-2);border:1px solid var(--line);border-radius:12px;
+      padding:16px 18px;color:var(--ivory-dim);
+    }
+    .rules li strong{color:var(--brass-bright);display:block;margin-bottom:3px}
+
+    /* ---------- CTA ---------- */
+    .cta{
+      text-align:center;
+      background:linear-gradient(180deg, rgba(158,23,48,0.16), rgba(158,23,48,0.05));
+      border:1px solid var(--garnet-line);
+      border-radius:18px;
+      padding:34px 22px;
+    }
+    .cta p{color:var(--ivory-dim);max-width:440px;margin:0 auto 20px}
+    .cta strong{color:var(--brass-bright)}
+    .badges{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center;margin-top:6px}
+    .badge-link{display:inline-block;line-height:0;border-radius:8px}
+    .badge-link:hover{filter:brightness(1.08)}
+    .badge-apple{height:54px;width:auto;display:block}
+    .badge-google{height:80px;width:auto;display:block;margin:-13px 0}
+
+    /* ---------- Bracket ---------- */
+    .bracket{display:flex;flex-direction:column;gap:14px;align-items:center}
+    .bracket-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%}
+    .mesa-card{
+      background:var(--ink-2);border:1px solid var(--line);border-radius:12px;
+      padding:16px 14px;text-align:center;
+    }
+    .mesa-card .mesa-name{display:block;font-weight:800;letter-spacing:0.04em;color:var(--brass);font-size:0.95rem;margin-bottom:6px;text-transform:uppercase}
+    .mesa-card .mesa-status{color:var(--ivory-faint);font-size:0.92rem}
+    .bracket-arrow{color:var(--ivory-faint);font-size:1.4rem;line-height:1}
+    .mesa-final{
+      background:linear-gradient(180deg, rgba(199,162,80,0.16), rgba(199,162,80,0.04));
+      border:1.5px solid var(--brass-dim);
+      border-radius:14px;
+      padding:22px 18px;text-align:center;width:100%;
+    }
+    .mesa-final .mesa-name{color:var(--brass-bright);font-size:1.15rem;letter-spacing:0.06em;font-weight:800;text-transform:uppercase;display:block;margin-bottom:6px}
+    .mesa-final .mesa-status{color:var(--ivory-dim)}
+
+    /* ---------- Champions wall ---------- */
+    .wall{
+      background:
+        radial-gradient(ellipse 400px 200px at 50% 0%, rgba(199,162,80,0.10), transparent 70%),
+        var(--ink-3);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:36px 22px;
+      text-align:center;
+    }
+    .plaque{display:inline-flex;flex-direction:column;align-items:center;gap:14px;max-width:340px}
+    .plaque-line1{font-size:0.82rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--brass-bright);font-weight:800}
+    .plaque-line2{font-size:1.05rem;color:var(--ivory-dim)}
+    .plaque-empty{
+      font-style:italic;color:var(--ivory-faint);border-top:1px solid rgba(199,162,80,0.3);
+      padding-top:12px;margin-top:2px;width:100%;
+    }
+
+    footer{
+      margin-top:56px;padding-top:24px;border-top:1px solid var(--line);
+      color:var(--ivory-faint);font-size:0.92rem;text-align:center;
+    }
+    footer p{margin:0 0 10px}
+    footer nav a{margin:0 8px;display:inline-block;color:var(--ivory-dim)}
+    footer nav a:hover{color:var(--brass-bright)}
+
+    @media (max-width:480px){
+      h1.title{font-size:2.4rem}
+      .countdown{grid-template-columns:repeat(4,1fr);gap:6px}
+      .countdown .num{font-size:1.5rem}
+      .bracket-row{grid-template-columns:1fr}
+      .badge-google{margin:-13px 0}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="brandlink" href="/es/" aria-label="IQ Dominó — inicio">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="6" fill="#7c1023"/><text x="50%" y="50%" font-family="system-ui,-apple-system,Arial,sans-serif" font-size="14" font-weight="800" fill="#e0bd6c" text-anchor="middle" dominant-baseline="central">IQ</text></svg>
+      IQ Dominó
+    </a>
+  </div>
+
+  <div class="wrap">
+    <main>
+
+      <!-- ================= HERO ================= -->
+      <header class="hero">
+        <span class="eyebrow">IQ Dominoes presenta</span>
+        <div class="hero-tiles" aria-hidden="true">
+          <svg class="domino-tile" viewBox="0 0 60 128" role="img" aria-hidden="true" focusable="false">
+            <rect class="tile-face" x="2" y="2" width="56" height="124" rx="10"/>
+            <line class="tile-mid" x1="8" y1="64" x2="52" y2="64"/>
+            <circle class="pip" cx="15" cy="17" r="4.2"/><circle class="pip" cx="30" cy="17" r="4.2"/><circle class="pip" cx="45" cy="17" r="4.2"/>
+            <circle class="pip" cx="15" cy="32" r="4.2"/><circle class="pip" cx="30" cy="32" r="4.2"/><circle class="pip" cx="45" cy="32" r="4.2"/>
+            <circle class="pip" cx="15" cy="47" r="4.2"/><circle class="pip" cx="30" cy="47" r="4.2"/><circle class="pip" cx="45" cy="47" r="4.2"/>
+            <circle class="pip" cx="15" cy="81" r="4.2"/><circle class="pip" cx="30" cy="81" r="4.2"/><circle class="pip" cx="45" cy="81" r="4.2"/>
+            <circle class="pip" cx="15" cy="96" r="4.2"/><circle class="pip" cx="30" cy="96" r="4.2"/><circle class="pip" cx="45" cy="96" r="4.2"/>
+            <circle class="pip" cx="15" cy="111" r="4.2"/><circle class="pip" cx="30" cy="111" r="4.2"/><circle class="pip" cx="45" cy="111" r="4.2"/>
+          </svg>
+        </div>
+
+        <h1 class="title display">El Torneo I</h1>
+        <p class="tagline">&ldquo;La Mesa Final&rdquo;</p>
+
+        <p class="datebar">VIERNES 28 DE AGOSTO &middot; 9:00&nbsp;PM ET</p>
+        <p class="subline">16 jugadores &middot; 4 mesas &middot; 1 campeón</p>
+
+        <!-- Countdown: progressive enhancement. Static date/time above already
+             satisfies the no-JS requirement; this block only adds a live ticker. -->
+        <div id="countdown" class="countdown" aria-live="polite">
+          <div class="cell"><span class="num" id="cd-days">00</span><span class="unit">Días</span></div>
+          <div class="cell"><span class="num" id="cd-hours">00</span><span class="unit">Horas</span></div>
+          <div class="cell"><span class="num" id="cd-mins">00</span><span class="unit">Min</span></div>
+          <div class="cell"><span class="num" id="cd-secs">00</span><span class="unit">Seg</span></div>
+        </div>
+        <div id="live-badge" class="live-badge"><span class="live-dot" aria-hidden="true"></span>¡Estamos en vivo!</div>
+      </header>
+
+      <div class="divider" aria-hidden="true">
+        <svg class="domino-tile" viewBox="0 0 60 128" role="img" focusable="false">
+          <rect class="tile-face" x="2" y="2" width="56" height="124" rx="10"/>
+          <line class="tile-mid" x1="8" y1="64" x2="52" y2="64"/>
+          <circle class="pip" cx="15" cy="17" r="4.2"/><circle class="pip" cx="15" cy="32" r="4.2"/><circle class="pip" cx="15" cy="47" r="4.2"/>
+          <circle class="pip" cx="45" cy="17" r="4.2"/><circle class="pip" cx="45" cy="32" r="4.2"/><circle class="pip" cx="45" cy="47" r="4.2"/>
+          <circle class="pip" cx="15" cy="81" r="4.2"/><circle class="pip" cx="15" cy="96" r="4.2"/><circle class="pip" cx="15" cy="111" r="4.2"/>
+          <circle class="pip" cx="45" cy="81" r="4.2"/><circle class="pip" cx="45" cy="96" r="4.2"/><circle class="pip" cx="45" cy="111" r="4.2"/>
+        </svg>
+      </div>
+
+      <!-- ================= CÓMO FUNCIONA ================= -->
+      <section aria-labelledby="como-heading">
+        <div class="section-head">
+          <span class="kicker">El formato</span>
+          <h2 id="como-heading">Cómo funciona</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <svg class="domino-tile brass-pip" viewBox="0 0 60 128" role="img" aria-hidden="true" focusable="false">
+              <rect class="tile-face" x="2" y="2" width="56" height="124" rx="10"/>
+              <line class="tile-mid" x1="8" y1="64" x2="52" y2="64"/>
+              <circle class="pip" cx="30" cy="96" r="4.2"/>
+            </svg>
+            <p><strong>4 mesas de 4</strong>Gana el que llegue primero a 3 manos en su mesa.</p>
+          </div>
+          <div class="step">
+            <svg class="domino-tile brass-pip" viewBox="0 0 60 128" role="img" aria-hidden="true" focusable="false">
+              <rect class="tile-face" x="2" y="2" width="56" height="124" rx="10"/>
+              <line class="tile-mid" x1="8" y1="64" x2="52" y2="64"/>
+              <circle class="pip" cx="15" cy="81" r="4.2"/><circle class="pip" cx="45" cy="111" r="4.2"/>
+            </svg>
+            <p><strong>El ganador pasa</strong>El campeón de cada una de las 4 mesas avanza a La Mesa Final.</p>
+          </div>
+          <div class="step">
+            <svg class="domino-tile brass-pip" viewBox="0 0 60 128" role="img" aria-hidden="true" focusable="false">
+              <rect class="tile-face" x="2" y="2" width="56" height="124" rx="10"/>
+              <line class="tile-mid" x1="8" y1="64" x2="52" y2="64"/>
+              <circle class="pip" cx="15" cy="81" r="4.2"/><circle class="pip" cx="30" cy="96" r="4.2"/><circle class="pip" cx="45" cy="111" r="4.2"/>
+            </svg>
+            <p><strong>La Pared para siempre</strong>El campeón de La Mesa Final entra en La Pared del Torneo.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= LAS REGLAS CLARAS ================= -->
+      <section aria-labelledby="reglas-heading">
+        <div class="section-head">
+          <span class="kicker">Sin sorpresas</span>
+          <h2 id="reglas-heading">Las reglas claras</h2>
+        </div>
+        <ul class="rules">
+          <li><strong>El servidor manda.</strong> El resultado oficial es el del juego, no capturas de pantalla.</li>
+          <li><strong>Caídas de conexión.</strong> 45 segundos para reconectar, reglas normales del juego.</li>
+          <li><strong>Check-in cierra 8:45 PM.</strong> Después de esa hora entra la reserva.</li>
+          <li><strong>Inactividad = eliminación.</strong> Si tu asiento pasa a la máquina, quedas eliminado aunque la máquina gane.</li>
+        </ul>
+      </section>
+
+      <!-- ================= CTA ================= -->
+      <section class="cta" aria-labelledby="cta-heading">
+        <div class="section-head">
+          <span class="kicker">¿Quieres tu silla?</span>
+          <h2 id="cta-heading">Asegura tu puesto</h2>
+        </div>
+        <p>Abre IQ Dominó y toca <strong>Avísame</strong> en el Torneo &mdash; o dile al que te invitó que confirme tu puesto.</p>
+        <div class="badges">
+          <a class="badge-link" href="https://apps.apple.com/app/id6759262289" aria-label="Descargar IQ Dominó en la App Store">
+            <img class="badge-apple" src="/assets/apple-es.svg" alt="Descargar en la App Store" width="180" height="54" />
+          </a>
+          <a class="badge-link" href="https://play.google.com/store/apps/details?id=com.iqdominoes.app" aria-label="Descargar IQ Dominó en Google Play">
+            <img class="badge-google" src="/assets/google-es.png" alt="Disponible en Google Play" width="207" height="80" />
+          </a>
+        </div>
+      </section>
+
+      <!-- ================= EL CUADRO ================= -->
+      <section aria-labelledby="cuadro-heading">
+        <div class="section-head">
+          <span class="kicker">El camino al título</span>
+          <h2 id="cuadro-heading">El cuadro</h2>
+        </div>
+        <p class="lede">Las mesas se anuncian antes del torneo. Esta es la ruta.</p>
+        <div class="bracket">
+          <div class="bracket-row">
+            <div class="mesa-card">
+              <span class="mesa-name">Mesa A</span>
+              <span class="mesa-status">Por anunciar</span>
+            </div>
+            <div class="mesa-card">
+              <span class="mesa-name">Mesa B</span>
+              <span class="mesa-status">Por anunciar</span>
+            </div>
+          </div>
+          <div class="bracket-row">
+            <div class="mesa-card">
+              <span class="mesa-name">Mesa C</span>
+              <span class="mesa-status">Por anunciar</span>
+            </div>
+            <div class="mesa-card">
+              <span class="mesa-name">Mesa D</span>
+              <span class="mesa-status">Por anunciar</span>
+            </div>
+          </div>
+          <div class="bracket-arrow" aria-hidden="true">&darr;</div>
+          <div class="mesa-final">
+            <span class="mesa-name">La Mesa Final</span>
+            <span class="mesa-status">4 campeones de mesa &middot; Por anunciar</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= LA PARED ================= -->
+      <section aria-labelledby="pared-heading">
+        <div class="section-head">
+          <span class="kicker">Historia</span>
+          <h2 id="pared-heading">La Pared del Torneo</h2>
+        </div>
+        <div class="wall">
+          <div class="plaque">
+            <svg class="domino-tile plaque-tile" viewBox="0 0 60 128" role="img" aria-hidden="true" focusable="false">
+              <rect class="tile-face" x="2" y="2" width="56" height="124" rx="10"/>
+              <line class="tile-mid" x1="8" y1="64" x2="52" y2="64"/>
+              <circle class="pip" cx="15" cy="17" r="4.2"/><circle class="pip" cx="30" cy="17" r="4.2"/><circle class="pip" cx="45" cy="17" r="4.2"/>
+              <circle class="pip" cx="15" cy="32" r="4.2"/><circle class="pip" cx="30" cy="32" r="4.2"/><circle class="pip" cx="45" cy="32" r="4.2"/>
+              <circle class="pip" cx="15" cy="47" r="4.2"/><circle class="pip" cx="30" cy="47" r="4.2"/><circle class="pip" cx="45" cy="47" r="4.2"/>
+              <circle class="pip" cx="15" cy="81" r="4.2"/><circle class="pip" cx="30" cy="81" r="4.2"/><circle class="pip" cx="45" cy="81" r="4.2"/>
+              <circle class="pip" cx="15" cy="96" r="4.2"/><circle class="pip" cx="30" cy="96" r="4.2"/><circle class="pip" cx="45" cy="96" r="4.2"/>
+              <circle class="pip" cx="15" cy="111" r="4.2"/><circle class="pip" cx="30" cy="111" r="4.2"/><circle class="pip" cx="45" cy="111" r="4.2"/>
+            </svg>
+            <p class="plaque-line1">Campeón &middot; El Torneo I</p>
+            <p class="plaque-line2">28 ago 2026</p>
+            <p class="plaque-empty">Por coronar</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <p>Sigue el torneo en vivo aquí la noche del 28.</p>
+      <nav aria-label="Sitio">
+        <a href="/es/">Inicio</a>
+        <a href="/es/privacy/">Privacidad</a>
+        <a href="/es/terms/">Términos</a>
+        <a href="/support/" hreflang="en">Soporte</a>
+      </nav>
+      <p>&copy; 2026 Global Data and Consulting Solutions, LLC. IQ Dominó es un producto de GDACS, registrado en Florida.</p>
+      <p>Contacto: <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a></p>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    // Progressive-enhancement countdown only. All page copy already renders
+    // the date/time statically above, so this is purely decorative if JS
+    // is disabled or fails.
+    var TARGET = new Date('2026-08-28T21:00:00-04:00').getTime();
+    var elDays = document.getElementById('cd-days');
+    var elHours = document.getElementById('cd-hours');
+    var elMins = document.getElementById('cd-mins');
+    var elSecs = document.getElementById('cd-secs');
+    var elCountdown = document.getElementById('countdown');
+    var elLive = document.getElementById('live-badge');
+    if (!elDays || !elHours || !elMins || !elSecs) return;
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      var now = Date.now();
+      var diff = TARGET - now;
+      if (diff <= 0) {
+        elCountdown.classList.add('hide');
+        elLive.classList.add('show');
+        clearInterval(timer);
+        return;
+      }
+      var days = Math.floor(diff / 86400000);
+      var hours = Math.floor((diff % 86400000) / 3600000);
+      var mins = Math.floor((diff % 3600000) / 60000);
+      var secs = Math.floor((diff % 60000) / 1000);
+      elDays.textContent = pad(days);
+      elHours.textContent = pad(hours);
+      elMins.textContent = pad(mins);
+      elSecs.textContent = pad(secs);
+    }
+
+    tick();
+    var timer = setInterval(tick, 1000);
+  })();
+  </script>
+</body>
+</html>
