@@ -281,6 +281,17 @@
       padding-top:12px;margin-top:2px;width:100%;
     }
 
+    .sponsor-card{
+      display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px 22px;
+      max-width:560px;margin:0 auto;padding:22px 26px;border:1px solid rgba(179,132,74,.4);
+      border-radius:12px;background:rgba(31,20,13,.55)
+    }
+    .sponsor-mark{width:56px;height:56px;border-radius:10px;flex:0 0 auto}
+    .sponsor-info{text-align:left;min-width:220px}
+    .sponsor-name{font-size:1.02rem;font-weight:800;letter-spacing:.08em;color:var(--ivory)}
+    .sponsor-tag{font-size:.86rem;color:var(--ivory-dim);margin-top:2px}
+    .sponsor-links{font-size:.9rem;margin-top:6px}
+    .sponsor-links a{color:var(--brass-bright)}
     footer{
       margin-top:56px;padding-top:24px;border-top:1px solid var(--line);
       color:var(--ivory-faint);font-size:0.92rem;text-align:center;
@@ -475,6 +486,22 @@
             <p class="plaque-line1">Campeón &middot; El Torneo I</p>
             <p class="plaque-line2">28 ago 2026</p>
             <p class="plaque-empty">Por coronar</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PATROCINADOR ================= -->
+      <section aria-labelledby="sponsor-heading">
+        <div class="section-head">
+          <span class="kicker">Patrocinador oficial</span>
+          <h2 id="sponsor-heading">Hecho a mano, como un buen dominó</h2>
+        </div>
+        <div class="sponsor-card">
+          <svg class="sponsor-mark" viewBox="0 0 96 96" role="img" aria-label="Rivas Installation &amp; Design"><rect width="96" height="96" rx="14" fill="#1f140d"/><rect x="48" y="14" width="34" height="68" fill="#f4ecdf"/><rect x="14" y="14" width="34" height="68" fill="#b3844a"/><polygon points="48,19 68,15.5 68,31.5 48,28" fill="#b3844a"/><polygon points="48,43 68,39.5 68,55.5 48,52" fill="#b3844a"/><polygon points="48,67 68,63.5 68,79.5 48,76" fill="#b3844a"/><rect x="47" y="14" width="1.5" height="68" fill="#2b1c13" opacity=".35"/></svg>
+          <div class="sponsor-info">
+            <p class="sponsor-name">RIVAS INSTALLATION &amp; DESIGN</p>
+            <p class="sponsor-tag">Puertas de madera a la medida y carpintería fina · Miami-Dade y Broward</p>
+            <p class="sponsor-links"><a href="tel:+17865642032">(786) 564-2032</a> &middot; <a href="https://rivas-site.vercel.app" rel="noopener">rivas-site.vercel.app</a></p>
           </div>
         </div>
       </section>
