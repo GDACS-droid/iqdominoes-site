@@ -244,12 +244,55 @@
     .badge-apple{height:54px;width:auto;display:block}
     .badge-google{height:80px;width:auto;display:block;margin:-13px 0}
 
+    /* ---------- Los 16 (roster) ---------- */
+    .roster{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+      max-width:560px;margin:0 auto;
+    }
+    @media (min-width:720px){ .roster{grid-template-columns:repeat(4,1fr)} }
+    .roster-slot{
+      background:var(--ink-2);border:1px solid var(--line);border-radius:12px;
+      padding:14px 8px;text-align:center;min-height:88px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    }
+    .roster-slot .slot-num{
+      font-variant-numeric:tabular-nums;font-weight:800;color:var(--brass);
+      font-size:0.92rem;letter-spacing:0.04em;
+    }
+    .roster-slot .slot-state{
+      color:var(--ivory-faint);font-size:0.84rem;font-style:italic;
+      max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .roster-slot.taken{
+      border-color:var(--garnet-line);
+      box-shadow:0 0 0 1px var(--garnet-line) inset;
+    }
+    .roster-slot.taken .slot-state{color:var(--ivory);font-style:normal;font-weight:700}
+    .roster-slot .listo-chip{
+      display:inline-block;font-size:0.66rem;font-weight:800;letter-spacing:0.08em;
+      text-transform:uppercase;color:var(--ink);
+      background:linear-gradient(180deg, var(--brass-bright), var(--brass));
+      padding:2px 8px;border-radius:999px;
+    }
+    @media (prefers-reduced-motion:no-preference){
+      .roster-slot.taken{ animation:slot-pulse 2.2s ease-out 1; }
+    }
+    @keyframes slot-pulse{
+      0%{ box-shadow:0 0 0 1px var(--garnet-line) inset }
+      45%{ box-shadow:0 0 0 4px var(--garnet-line) inset }
+      100%{ box-shadow:0 0 0 1px var(--garnet-line) inset }
+    }
+    .roster-footnote{
+      text-align:center;color:var(--ivory-faint);font-size:0.82rem;font-style:italic;
+      margin-top:16px;
+    }
+
     /* ---------- Bracket ---------- */
     .bracket{display:flex;flex-direction:column;gap:14px;align-items:center}
     .bracket-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%}
     .mesa-card{
       background:var(--ink-2);border:1px solid var(--line);border-radius:12px;
-      padding:16px 14px;text-align:center;
+      padding:16px 14px;text-align:center;min-height:96px;
     }
     .mesa-card .mesa-name{display:block;font-weight:800;letter-spacing:0.04em;color:var(--brass);font-size:0.95rem;margin-bottom:6px;text-transform:uppercase}
     .mesa-card .mesa-status{color:var(--ivory-faint);font-size:0.92rem}
@@ -258,10 +301,51 @@
       background:linear-gradient(180deg, rgba(199,162,80,0.16), rgba(199,162,80,0.04));
       border:1.5px solid var(--brass-dim);
       border-radius:14px;
-      padding:22px 18px;text-align:center;width:100%;
+      padding:22px 18px;text-align:center;width:100%;min-height:120px;
     }
     .mesa-final .mesa-name{color:var(--brass-bright);font-size:1.15rem;letter-spacing:0.06em;font-weight:800;text-transform:uppercase;display:block;margin-bottom:6px}
     .mesa-final .mesa-status{color:var(--ivory-dim)}
+
+    /* ---------- Live bracket enhancement ---------- */
+    .cuadro-heading-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+    .en-vivo-badge{
+      display:none;align-items:center;gap:6px;
+      font-size:0.72rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;
+      color:#bdeee8;background:rgba(31,138,128,0.16);border:1px solid rgba(31,138,128,0.5);
+      padding:4px 10px;border-radius:999px;
+    }
+    .en-vivo-badge.show{display:inline-flex}
+    .mesa-status-chip{
+      display:inline-block;font-size:0.7rem;font-weight:800;letter-spacing:0.06em;
+      text-transform:uppercase;padding:2px 9px;border-radius:999px;margin-bottom:8px;
+    }
+    .mesa-status-chip.waiting{color:var(--ivory-faint);background:rgba(240,231,213,0.08)}
+    .mesa-status-chip.playing{color:#bdeee8;background:rgba(31,138,128,0.16)}
+    .mesa-status-chip.finished{color:var(--ink);background:linear-gradient(180deg, var(--brass-bright), var(--brass))}
+    .mesa-players{display:flex;flex-direction:column;gap:5px;margin-top:8px;text-align:left}
+    .mesa-player-row{
+      display:flex;align-items:center;justify-content:space-between;gap:8px;
+      font-size:0.85rem;color:var(--ivory-dim);
+    }
+    .mesa-player-row.is-winner{color:var(--brass-bright);font-weight:800}
+    .mesa-player-row.is-loser{opacity:0.6}
+    .mesa-player-row .p-alias{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px}
+    .mesa-player-row .p-adv{
+      flex:none;color:var(--brass);font-size:0.62rem;font-weight:800;
+      letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;
+    }
+    .mesa-player-row .p-pips{display:inline-flex;gap:3px;flex:none}
+    .pip-dot{width:7px;height:7px;border-radius:50%;background:rgba(240,231,213,0.18);display:inline-block}
+    .pip-dot.filled{background:var(--brass-bright)}
+    .mesa-degraded-note{display:block;color:var(--ivory-faint);font-size:0.72rem;font-style:italic;margin-top:6px}
+    .bracket-updated{text-align:center;color:var(--ivory-faint);font-size:0.78rem;margin-top:12px}
+    .plaque-empty.crowned{font-style:normal;color:var(--brass-bright);font-weight:800}
+    .demo-badge{
+      position:fixed;top:10px;right:10px;z-index:50;
+      background:var(--garnet);color:var(--ivory);font-weight:800;font-size:0.72rem;
+      letter-spacing:0.08em;text-transform:uppercase;padding:6px 10px;border-radius:8px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.4);
+    }
 
     /* ---------- Champions wall ---------- */
     .wall{
@@ -429,40 +513,77 @@
         </div>
       </section>
 
+      <!-- ================= LOS 16 ================= -->
+      <section aria-labelledby="lista-heading">
+        <div class="section-head">
+          <span class="kicker">La lista se llena</span>
+          <h2 id="lista-heading">Los 16</h2>
+          <p class="lede">Cada puesto confirmado aparece aquí con su LISTO. Los primeros 16 se sientan.</p>
+        </div>
+        <div class="roster" id="roster">
+          <div class="roster-slot" data-slot="1"><span class="slot-num">01</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="2"><span class="slot-num">02</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="3"><span class="slot-num">03</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="4"><span class="slot-num">04</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="5"><span class="slot-num">05</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="6"><span class="slot-num">06</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="7"><span class="slot-num">07</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="8"><span class="slot-num">08</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="9"><span class="slot-num">09</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="10"><span class="slot-num">10</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="11"><span class="slot-num">11</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="12"><span class="slot-num">12</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="13"><span class="slot-num">13</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="14"><span class="slot-num">14</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="15"><span class="slot-num">15</span><span class="slot-state">libre</span></div>
+          <div class="roster-slot" data-slot="16"><span class="slot-num">16</span><span class="slot-state">libre</span></div>
+        </div>
+        <p class="roster-footnote">Confirma con el organizador &mdash; tu puesto se marca aquí.</p>
+      </section>
+
       <!-- ================= EL CUADRO ================= -->
       <section aria-labelledby="cuadro-heading">
         <div class="section-head">
           <span class="kicker">El camino al título</span>
-          <h2 id="cuadro-heading">El cuadro</h2>
+          <div class="cuadro-heading-row">
+            <h2 id="cuadro-heading">El cuadro</h2>
+            <span class="en-vivo-badge" id="en-vivo-badge"><span class="live-dot" aria-hidden="true"></span>En vivo</span>
+          </div>
         </div>
         <p class="lede">Las mesas se anuncian antes del torneo. Esta es la ruta.</p>
-        <div class="bracket">
+        <div class="bracket" id="bracket" aria-live="polite">
           <div class="bracket-row">
-            <div class="mesa-card">
+            <div class="mesa-card" data-mesa="A">
               <span class="mesa-name">Mesa A</span>
-              <span class="mesa-status">Por anunciar</span>
+              <span class="mesa-status" data-role="status">Por anunciar</span>
+              <div class="mesa-players" data-role="players" hidden></div>
             </div>
-            <div class="mesa-card">
+            <div class="mesa-card" data-mesa="B">
               <span class="mesa-name">Mesa B</span>
-              <span class="mesa-status">Por anunciar</span>
+              <span class="mesa-status" data-role="status">Por anunciar</span>
+              <div class="mesa-players" data-role="players" hidden></div>
             </div>
           </div>
           <div class="bracket-row">
-            <div class="mesa-card">
+            <div class="mesa-card" data-mesa="C">
               <span class="mesa-name">Mesa C</span>
-              <span class="mesa-status">Por anunciar</span>
+              <span class="mesa-status" data-role="status">Por anunciar</span>
+              <div class="mesa-players" data-role="players" hidden></div>
             </div>
-            <div class="mesa-card">
+            <div class="mesa-card" data-mesa="D">
               <span class="mesa-name">Mesa D</span>
-              <span class="mesa-status">Por anunciar</span>
+              <span class="mesa-status" data-role="status">Por anunciar</span>
+              <div class="mesa-players" data-role="players" hidden></div>
             </div>
           </div>
           <div class="bracket-arrow" aria-hidden="true">&darr;</div>
-          <div class="mesa-final">
+          <div class="mesa-final" data-mesa="FIN">
             <span class="mesa-name">La Mesa Final</span>
-            <span class="mesa-status">4 campeones de mesa &middot; Por anunciar</span>
+            <span class="mesa-status" data-role="status">4 campeones de mesa &middot; Por anunciar</span>
+            <div class="mesa-players" data-role="players" hidden></div>
           </div>
         </div>
+        <p class="bracket-updated" id="bracket-updated" hidden></p>
       </section>
 
       <!-- ================= LA PARED ================= -->
@@ -485,7 +606,7 @@
             </svg>
             <p class="plaque-line1">Campeón &middot; El Torneo I</p>
             <p class="plaque-line2">28 ago 2026</p>
-            <p class="plaque-empty">Por coronar</p>
+            <p class="plaque-empty" id="plaque-champ">Por coronar</p>
           </div>
         </div>
       </section>
@@ -558,6 +679,361 @@
 
     tick();
     var timer = setInterval(tick, 1000);
+  })();
+  </script>
+
+  <script>
+  (function () {
+    // "Los 16" roster + live bracket. Both are strictly progressive-enhancement:
+    // the static markup above already reads correctly (all "libre" / "Por
+    // anunciar" / "Por coronar") with JS off or if every fetch fails. Every
+    // dynamic string from JSON is written via textContent — never innerHTML.
+    var DEMO = /(?:^|[?&])demo=1(?:&|$)/.test(location.search);
+
+    function isHidden() { return typeof document.hidden === 'boolean' && document.hidden; }
+
+    // Runs fn immediately, then every ms while the document is visible; a
+    // tick that fires while hidden is simply skipped (no catch-up burst).
+    function gatedInterval(fn, ms) {
+      setInterval(function () {
+        if (!isHidden()) fn();
+      }, ms);
+    }
+
+    function fetchJSON(url, timeoutMs) {
+      return new Promise(function (resolve, reject) {
+        var ac = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+        var timer = setTimeout(function () { if (ac) ac.abort(); }, timeoutMs);
+        var opts = ac ? { signal: ac.signal } : {};
+        fetch(url, opts).then(function (resp) {
+          clearTimeout(timer);
+          resp.json().then(function (json) {
+            resolve({ status: resp.status, json: json });
+          }, function (err) { reject(err); });
+        }, function (err) {
+          clearTimeout(timer);
+          reject(err);
+        });
+      });
+    }
+
+    /* ================= Los 16 (roster) ================= */
+    (function rosterModule() {
+      var root = document.getElementById('roster');
+      if (!root) return;
+      var slots = {};
+      var nodes = root.querySelectorAll('.roster-slot');
+      for (var i = 0; i < nodes.length; i++) {
+        var n = parseInt(nodes[i].getAttribute('data-slot'), 10);
+        if (n >= 1 && n <= 16) slots[n] = nodes[i];
+      }
+
+      function resetSlot(el) {
+        el.classList.remove('taken');
+        var state = el.querySelector('.slot-state');
+        if (state) state.textContent = 'libre';
+        var chip = el.querySelector('.listo-chip');
+        if (chip) chip.parentNode.removeChild(chip);
+      }
+
+      function fillSlot(el, handle) {
+        el.classList.add('taken');
+        var state = el.querySelector('.slot-state');
+        if (state) state.textContent = String(handle);
+        if (!el.querySelector('.listo-chip')) {
+          var chip = document.createElement('span');
+          chip.className = 'listo-chip';
+          chip.textContent = 'LISTO';
+          el.appendChild(chip);
+        }
+      }
+
+      function applyRoster(data) {
+        var n;
+        for (n in slots) { if (slots.hasOwnProperty(n)) resetSlot(slots[n]); }
+        if (!data || !Array.isArray(data.slots)) return;
+        var winners = {};
+        for (var i = 0; i < data.slots.length; i++) {
+          var entry = data.slots[i];
+          if (!entry || typeof entry !== 'object') continue;
+          var num = entry.n;
+          if (typeof num !== 'number' || !isFinite(num)) continue;
+          num = Math.floor(num);
+          if (num < 1 || num > 16) continue;
+          if (typeof entry.handle !== 'string' || !entry.handle) continue;
+          winners[num] = entry.handle; // last wins
+        }
+        for (n in winners) {
+          if (winners.hasOwnProperty(n) && slots[n]) fillSlot(slots[n], winners[n]);
+        }
+      }
+
+      function demoFixture() {
+        var handles = ['@asere', '@ElZurdo', '@Yoel305', '@Kimbo', '@LaFiera', '@Nando', '@Suki', '@Tato', '@Vivi', '@Mona', '@Rulo'];
+        var fixtureSlots = [];
+        for (var i = 0; i < handles.length; i++) fixtureSlots.push({ n: i + 1, handle: handles[i] });
+        applyRoster({ slots: fixtureSlots });
+      }
+
+      if (DEMO) { demoFixture(); return; }
+
+      function load() {
+        var url = '/torneo/roster.json?v=' + Math.floor(Date.now() / 300000);
+        fetchJSON(url, 10000).then(function (res) {
+          applyRoster(res.json);
+        }, function (err) {
+          console.warn('roster.json fetch failed', err);
+        });
+      }
+
+      load();
+      gatedInterval(load, 300000);
+    })();
+
+    /* ================= Live bracket ================= */
+    (function liveModule() {
+      var bracket = document.getElementById('bracket');
+      if (!bracket) return;
+      var enVivoBadge = document.getElementById('en-vivo-badge');
+      var updatedEl = document.getElementById('bracket-updated');
+      var plaqueChamp = document.getElementById('plaque-champ');
+
+      var CODE_TO_MESA = {
+        TORN1A: 'A', TORN2A: 'A',
+        TORN1B: 'B', TORN2B: 'B',
+        TORN1C: 'C', TORN2C: 'C',
+        TORN1D: 'D', TORN2D: 'D',
+        TORNFIN: 'FIN', TORNFIN2: 'FIN'
+      };
+      var TARGET_HANDS = { A: 3, B: 3, C: 3, D: 3, FIN: 5 };
+
+      var cards = {};
+      var cardNodes = bracket.querySelectorAll('[data-mesa]');
+      for (var i = 0; i < cardNodes.length; i++) {
+        cards[cardNodes[i].getAttribute('data-mesa')] = cardNodes[i];
+      }
+
+      function pipsRow(count, filled) {
+        var wrap = document.createElement('span');
+        wrap.className = 'p-pips';
+        for (var k = 0; k < count; k++) {
+          var dot = document.createElement('span');
+          dot.className = 'pip-dot' + (k < filled ? ' filled' : '');
+          wrap.appendChild(dot);
+        }
+        return wrap;
+      }
+
+      function renderMesaCard(mesaKey, match, degraded) {
+        var card = cards[mesaKey];
+        if (!card) return false;
+        var statusEl = card.querySelector('[data-role="status"]');
+        var playersEl = card.querySelector('[data-role="players"]');
+        if (!statusEl || !playersEl) return false;
+
+        var status = match.status;
+        if (status !== 'waiting' && status !== 'playing' && status !== 'finished') status = 'playing';
+        var target = TARGET_HANDS[mesaKey] || 3;
+        var players = Array.isArray(match.players) ? match.players : [];
+        var handWins = (match.handWins && typeof match.handWins === 'object') ? match.handWins : {};
+        var winner = (typeof match.winnerAlias === 'string') ? match.winnerAlias : '';
+
+        // Status chip (replaces the static status text, no innerHTML).
+        statusEl.textContent = '';
+        var chip = document.createElement('span');
+        chip.className = 'mesa-status-chip ' + status;
+        chip.textContent = status === 'waiting' ? 'esperando' : (status === 'finished' ? 'terminada' : 'en juego');
+        statusEl.appendChild(chip);
+        if (degraded) {
+          var note = document.createElement('span');
+          note.className = 'mesa-degraded-note';
+          note.textContent = 'en vivo · con retraso';
+          statusEl.appendChild(note);
+        }
+
+        // Player rows.
+        while (playersEl.firstChild) playersEl.removeChild(playersEl.firstChild);
+        for (var p = 0; p < players.length && p < 4; p++) {
+          var pl = players[p];
+          if (!pl || typeof pl.alias !== 'string' || !pl.alias) continue;
+          var wins = handWins[pl.alias];
+          if (typeof wins !== 'number' || !isFinite(wins) || wins < 0) wins = 0;
+          wins = Math.min(Math.floor(wins), target);
+
+          var row = document.createElement('div');
+          row.className = 'mesa-player-row';
+          var isWinner = status === 'finished' && winner && pl.alias === winner;
+          if (isWinner) row.classList.add('is-winner');
+          else if (status === 'finished' && winner) row.classList.add('is-loser');
+
+          var aliasEl = document.createElement('span');
+          aliasEl.className = 'p-alias';
+          aliasEl.textContent = pl.alias;
+          row.appendChild(aliasEl);
+          if (isWinner) {
+            var advEl = document.createElement('span');
+            advEl.className = 'p-adv';
+            advEl.textContent = '→ Final';
+            row.appendChild(advEl);
+          }
+          row.appendChild(pipsRow(target, wins));
+          playersEl.appendChild(row);
+        }
+        if (players.length) playersEl.hidden = false;
+
+        return status === 'playing';
+      }
+
+      function renderFinalCard(match, degraded) {
+        var card = cards.FIN;
+        if (!card) return false;
+        var isPlaying = renderMesaCard('FIN', match, degraded);
+        if (match.status === 'finished' && typeof match.winnerAlias === 'string' && match.winnerAlias) {
+          var statusEl = card.querySelector('[data-role="status"]');
+          if (statusEl) {
+            while (statusEl.firstChild) statusEl.removeChild(statusEl.firstChild);
+            var champLabel = document.createElement('span');
+            champLabel.className = 'mesa-status-chip finished';
+            champLabel.textContent = 'CAMPEÓN · ' + match.winnerAlias;
+            statusEl.appendChild(champLabel);
+          }
+          if (plaqueChamp) {
+            plaqueChamp.textContent = match.winnerAlias;
+            plaqueChamp.classList.add('crowned');
+          }
+        }
+        return isPlaying;
+      }
+
+      function pickLatest(a, b) {
+        if (!a) return b;
+        if (!b) return a;
+        var ua = Date.parse(a.updatedAt);
+        var ub = Date.parse(b.updatedAt);
+        if (!isFinite(ua)) return b;
+        if (!isFinite(ub)) return a;
+        return ub > ua ? b : a;
+      }
+
+      function render(data, degraded) {
+        if (!data || !Array.isArray(data.matches)) return;
+        var byMesa = {};
+        for (var i = 0; i < data.matches.length; i++) {
+          var m = data.matches[i];
+          if (!m || typeof m.code !== 'string') continue;
+          var mesaKey = CODE_TO_MESA[m.code];
+          if (!mesaKey) continue;
+          byMesa[mesaKey] = pickLatest(byMesa[mesaKey], m);
+        }
+        var anyPlaying = false;
+        ['A', 'B', 'C', 'D'].forEach(function (mesaKey) {
+          if (!byMesa[mesaKey]) return;
+          if (renderMesaCard(mesaKey, byMesa[mesaKey], degraded)) anyPlaying = true;
+        });
+        if (byMesa.FIN) {
+          if (renderFinalCard(byMesa.FIN, degraded)) anyPlaying = true;
+        }
+        if (enVivoBadge) enVivoBadge.classList.toggle('show', anyPlaying);
+        if (updatedEl) {
+          var d = new Date();
+          var hh = String(d.getHours()).padStart(2, '0');
+          var mm = String(d.getMinutes()).padStart(2, '0');
+          var ss = String(d.getSeconds()).padStart(2, '0');
+          updatedEl.textContent = 'Actualizado ' + hh + ':' + mm + ':' + ss;
+          updatedEl.hidden = false;
+        }
+      }
+
+      if (DEMO) {
+        var fixture = {
+          updatedAt: new Date().toISOString(),
+          matches: [
+            {
+              code: 'TORN1A', status: 'finished',
+              players: [
+                { seat: 0, alias: 'Ana' }, { seat: 1, alias: 'Beto' },
+                { seat: 2, alias: 'Caro' }, { seat: 3, alias: 'Dario' }
+              ],
+              handWins: { Ana: 3, Beto: 1, Caro: 0, Dario: 2 },
+              winnerAlias: 'Ana'
+            },
+            {
+              code: 'TORN1B', status: 'playing',
+              players: [
+                { seat: 0, alias: 'Nando' }, { seat: 1, alias: 'Suki' },
+                { seat: 2, alias: 'Tato' }, { seat: 3, alias: 'Vivi' }
+              ],
+              handWins: { Nando: 2, Suki: 1, Tato: 0, Vivi: 1 }
+            },
+            {
+              code: 'TORN1C', status: 'playing',
+              players: [
+                { seat: 0, alias: 'Pepe' }, { seat: 1, alias: 'Mona' },
+                { seat: 2, alias: 'Rulo' }, { seat: 3, alias: 'Cuca' }
+              ],
+              handWins: { Pepe: 1, Mona: 2, Rulo: 0, Cuca: 1 }
+            },
+            {
+              code: 'TORN1D', status: 'waiting',
+              players: [
+                { seat: 0, alias: 'Yeni' }, { seat: 1, alias: 'Wilo' },
+                { seat: 2, alias: 'Dulce' }, { seat: 3, alias: 'Coco' }
+              ],
+              handWins: {}
+            },
+            {
+              // Not finished by design: the demo fixture must never crown
+              // the plaque or alter La Pared.
+              code: 'TORNFIN', status: 'playing',
+              players: [
+                { seat: 0, alias: 'El Zurdo' }, { seat: 1, alias: 'Yoel' },
+                { seat: 2, alias: 'Kimbo' }, { seat: 3, alias: 'La Fiera' }
+              ],
+              handWins: { 'El Zurdo': 3, Yoel: 2, Kimbo: 0, 'La Fiera': 0 }
+            }
+          ]
+        };
+        render(fixture, false);
+        var badge = document.createElement('div');
+        badge.className = 'demo-badge';
+        badge.textContent = 'DEMO';
+        document.body.appendChild(badge);
+        return;
+      }
+
+      var ENDPOINT = 'https://api.iqdominoes.com/torneo/live.json';
+      var hasEverSucceeded = false;
+      var pollTimerStarted = false;
+
+      function probe() {
+        fetchJSON(ENDPOINT, 10000).then(function (res) {
+          if (res.status === 404) return; // stays static; keep probing every 5 min
+          render(res.json, res.status === 503);
+          hasEverSucceeded = true;
+          if (!pollTimerStarted) {
+            pollTimerStarted = true;
+            gatedInterval(poll, 30000);
+          }
+        }, function (err) {
+          console.warn('live.json probe failed', err);
+        });
+      }
+
+      function poll() {
+        fetchJSON(ENDPOINT, 10000).then(function (res) {
+          render(res.json, res.status === 503);
+        }, function (err) {
+          console.warn('live.json poll failed', err);
+        });
+      }
+
+      probe();
+      // 5-minute probe cadence keeps running even after success; harmless
+      // (poll() takes over the 30s cadence once hasEverSucceeded is true,
+      // and this coarser interval just re-probes in parallel — never faster
+      // than 30s, well within the "no faster than 30s" budget).
+      gatedInterval(function () { if (!hasEverSucceeded) probe(); }, 300000);
+    })();
   })();
   </script>
 </body>
