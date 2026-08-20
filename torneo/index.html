@@ -162,6 +162,22 @@
     }
     .subline{color:var(--ivory-dim);font-size:1.05rem;margin:0 0 8px}
 
+    /* ---------- Inscribirme CTA + live widget (hero, above the fold) ---------- */
+    .insc-cta{
+      display:inline-block;min-height:56px;line-height:56px;padding:0 34px;
+      margin:14px 0 10px;
+      background:linear-gradient(180deg, var(--garnet-bright), var(--garnet));
+      color:var(--ivory);font-weight:800;font-size:1.15rem;letter-spacing:0.02em;
+      border-radius:999px;text-decoration:none;
+      box-shadow:0 10px 24px rgba(158,23,48,0.4);
+    }
+    .insc-cta:hover{filter:brightness(1.08)}
+    .live-widget{
+      display:block;margin:2px 0 4px;color:var(--ivory-faint);font-size:0.92rem;
+      min-height:1.4em;
+    }
+    .live-widget.err{color:var(--ivory-faint)}
+
     /* ---------- Countdown ---------- */
     .countdown{
       margin:26px auto 6px;
@@ -425,6 +441,13 @@
 
         <p class="datebar">VIERNES 28 DE AGOSTO &middot; 9:00&nbsp;PM ET</p>
         <p class="subline">16 jugadores &middot; 4 mesas &middot; 1 campeón</p>
+
+        <!-- Inscribirme CTA: primary above-the-fold path to /torneo/registro/.
+             Copy is static by default ("Asegura tu puesto") and only swaps
+             to the "quedan N puestos" urgency copy once /api/torneo/public
+             confirms status === 'open_public' (progressive enhancement). -->
+        <a class="insc-cta" href="/torneo/registro/" id="insc-cta">Inscribirme</a>
+        <span class="live-widget" id="live-widget">Inscripciones abiertas &middot; cupos limitados</span>
 
         <!-- Countdown: progressive enhancement. Static date/time above already
              satisfies the no-JS requirement; this block only adds a live ticker. -->
@@ -716,6 +739,58 @@
         });
       });
     }
+
+    /* ================= Inscribirme live widget (seats/waitlist/window) =================
+       API contract this reads — the one place to change if the server worker's
+       exact shape differs: GET https://api.iqdominoes.com/api/torneo/public ->
+       { seatsTaken, seatsTotal, waitlistCount, tranche, windowEndsAt, eventAt, status }
+       Every field is feature-detected. Static fallback text is already in the
+       markup, so a failed/never-run fetch is a no-op, never a spinner. */
+    (function inscribirmeModule() {
+      var PUBLIC_ENDPOINT = 'https://api.iqdominoes.com/api/torneo/public';
+      var widget = document.getElementById('live-widget');
+      var cta = document.getElementById('insc-cta');
+      if (!widget) return;
+
+      function fmtWindow(iso) {
+        if (!iso) return null;
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return null;
+        try {
+          return new Intl.DateTimeFormat('es-US', {
+            timeZone: 'America/New_York', weekday: 'short', hour: 'numeric', minute: '2-digit'
+          }).format(d);
+        } catch (e) { return null; }
+      }
+
+      function render(data) {
+        if (!data || typeof data !== 'object') return;
+        var taken = (typeof data.seatsTaken === 'number') ? data.seatsTaken : null;
+        var total = (typeof data.seatsTotal === 'number') ? data.seatsTotal : 16;
+        var waitlist = (typeof data.waitlistCount === 'number') ? data.waitlistCount : null;
+        var windowText = fmtWindow(data.windowEndsAt);
+        var status = typeof data.status === 'string' ? data.status : null;
+
+        var parts = [];
+        if (taken !== null) parts.push('Puestos: ' + taken + '/' + total);
+        if (windowText) parts.push('Ventana cierra: ' + windowText);
+        else if (waitlist !== null) parts.push('Lista de espera: ' + waitlist);
+        if (parts.length) widget.textContent = parts.join(' · ');
+
+        if (cta && status === 'open_public' && taken !== null) {
+          var remaining = Math.max(0, total - taken);
+          cta.textContent = 'Quedan ' + remaining + ' puestos — inscríbete ya';
+        }
+      }
+
+      fetchJSON(PUBLIC_ENDPOINT, 8000).then(function (res) {
+        if (res.status >= 200 && res.status < 300) render(res.json);
+        // any other status: leave the static fallback text in place
+      }, function (err) {
+        console.warn('torneo public widget fetch failed', err);
+        // leave the static fallback text in place — never a spinner
+      });
+    })();
 
     /* ================= Los 16 (roster) ================= */
     (function rosterModule() {

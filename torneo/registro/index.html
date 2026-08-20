@@ -1,0 +1,667 @@
+<!doctype html>
+<!--
+  /torneo/registro/  —  EL TORNEO I registration form.
+  Spanish-first, EN toggle. Built for a 70-year-old on a phone: big type
+  (>=20px body), big tap targets (>=48px), zero external assets, no build
+  step (site convention). Reads ?t=<token> then immediately strips it from
+  the URL bar via history.replaceState (A4). Shares the /torneo/ visual
+  identity (black lacquer / oxblood / brass) but is its own page — this is
+  NOT claimed by the app's universal links (AASA only claims /join/*, see
+  the deploy report), so it's safe to host at this path.
+
+  API contract this page codes against — the ONE place to change if the
+  server worker's exact shape differs (see API object below). Coded
+  defensively: every field read from a response is feature-detected, never
+  assumed present.
+-->
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Inscripción — El Torneo I · IQ Dominó</title>
+  <meta name="description" content="Confirma tu puesto en El Torneo I de IQ Dominó. Viernes 28 de agosto, 9:00 PM ET." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#120c0d" />
+  <link rel="canonical" href="https://www.iqdominoes.com/torneo/registro/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <style>
+    :root{
+      --ink:#120c0d;
+      --ink-2:#1c1416;
+      --ink-3:#241a1c;
+      --line:rgba(240,231,213,0.14);
+      --ivory:#f2e8d5;
+      --ivory-dim:rgba(242,232,213,0.78);
+      --ivory-faint:rgba(242,232,213,0.55);
+      --garnet:#7c1023;
+      --garnet-bright:#9e1730;
+      --garnet-line:rgba(158,23,48,0.45);
+      --brass:#c7a250;
+      --brass-bright:#e0bd6c;
+      --brass-dim:#8a6d34;
+      --teal:#1f8a80;
+      --good:#4caf7d;
+      --bad:#e0716c;
+    }
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(ellipse 900px 500px at 50% -10%, rgba(158,23,48,0.16), transparent 60%),
+        var(--ink);
+      color:var(--ivory);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      font-size:20px;
+      line-height:1.6;
+    }
+    .wrap{max-width:620px;margin:0 auto;padding:0 20px 64px}
+    a{color:var(--brass-bright)}
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
+      outline:3px solid var(--teal);outline-offset:2px;
+    }
+
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:18px 20px;max-width:620px;margin:0 auto;
+    }
+    .brandlink{display:inline-flex;align-items:center;gap:8px;color:var(--ivory-dim);font-weight:700;font-size:1rem;text-decoration:none}
+    .brandlink svg{width:24px;height:24px;flex:none}
+    .lang-toggle{
+      display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:none;
+    }
+    .lang-toggle button{
+      appearance:none;border:0;background:transparent;color:var(--ivory-faint);
+      font-weight:800;font-size:0.95rem;letter-spacing:0.04em;padding:10px 16px;
+      min-height:44px;cursor:pointer;
+    }
+    .lang-toggle button.active{background:var(--brass-bright);color:var(--ink)}
+
+    header.hero{padding:12px 0 8px;text-align:center}
+    .eyebrow{
+      display:block;font-size:0.85rem;font-weight:800;letter-spacing:0.14em;
+      color:var(--brass-bright);text-transform:uppercase;margin-bottom:10px;
+    }
+    h1{font-size:2rem;line-height:1.15;margin:0 0 10px;color:var(--ivory)}
+    .datebar{
+      display:inline-block;font-weight:800;font-size:1rem;color:var(--ink);
+      background:linear-gradient(180deg, var(--brass-bright), var(--brass));
+      padding:10px 18px;border-radius:999px;margin-bottom:6px;
+    }
+    p.lede{color:var(--ivory-dim);margin:14px 0 0;font-size:1.05rem}
+
+    section{margin-top:36px}
+    .card{
+      background:var(--ink-2);border:1px solid var(--line);border-radius:16px;
+      padding:24px 20px;
+    }
+
+    /* ---------- Form ---------- */
+    form .field{margin-bottom:22px}
+    label{display:block;font-weight:800;font-size:1.05rem;margin-bottom:8px;color:var(--ivory)}
+    label .opt{font-weight:400;color:var(--ivory-faint);font-size:0.9rem}
+    input[type=text], input[type=tel], select{
+      width:100%;font-size:1.15rem;padding:14px 16px;min-height:56px;
+      background:var(--ink-3);border:1.5px solid var(--line);border-radius:12px;
+      color:var(--ivory);font-family:inherit;
+    }
+    input::placeholder{color:var(--ivory-faint)}
+    .phone-row{display:flex;gap:10px}
+    .phone-row select{flex:0 0 148px;min-width:0}
+    .phone-row input{flex:1;min-width:0}
+    .other-code{margin-top:10px}
+    .field-error{color:var(--bad);font-size:0.95rem;margin-top:8px;display:none;font-weight:700}
+    .field.has-error input, .field.has-error select{border-color:var(--bad)}
+    .field.has-error .field-error{display:block}
+
+    .consent-row{
+      display:flex;gap:14px;align-items:flex-start;background:var(--ink-3);
+      border:1.5px solid var(--line);border-radius:12px;padding:16px;
+    }
+    .consent-row input[type=checkbox]{
+      width:30px;height:30px;flex:none;margin-top:2px;accent-color:var(--brass-bright);
+    }
+    .consent-row label{margin:0;font-weight:400;font-size:1rem;color:var(--ivory-dim)}
+
+    button.primary{
+      appearance:none;border:0;width:100%;min-height:60px;
+      background:linear-gradient(180deg, var(--garnet-bright), var(--garnet));
+      color:var(--ivory);font-weight:800;font-size:1.2rem;letter-spacing:0.02em;
+      border-radius:14px;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.4);
+      margin-top:6px;
+    }
+    button.primary:disabled{opacity:0.55;cursor:default}
+    button.primary:not(:disabled):hover{filter:brightness(1.08)}
+
+    button.secondary{
+      appearance:none;border:1.5px solid var(--line);background:transparent;color:var(--ivory-dim);
+      min-height:52px;font-size:1.02rem;font-weight:700;border-radius:12px;padding:10px 18px;cursor:pointer;
+    }
+    button.link-btn{
+      appearance:none;border:0;background:transparent;color:var(--brass-bright);
+      font-size:1.02rem;font-weight:700;text-decoration:underline;cursor:pointer;padding:10px 0;min-height:44px;
+    }
+
+    /* ---------- Result banner ---------- */
+    .result{
+      text-align:center;border-radius:16px;padding:28px 20px;display:none;
+    }
+    .result.show{display:block}
+    .result .big-icon{font-size:2.6rem;line-height:1;margin-bottom:10px}
+    .result h2{font-size:1.5rem;margin:0 0 10px;color:var(--ivory)}
+    .result p{color:var(--ivory-dim);margin:0 0 6px;font-size:1.08rem}
+    .result.ok{background:linear-gradient(180deg, rgba(76,175,125,0.16), rgba(76,175,125,0.05));border:1.5px solid rgba(76,175,125,0.5)}
+    .result.wait{background:linear-gradient(180deg, rgba(199,162,80,0.16), rgba(199,162,80,0.05));border:1.5px solid var(--brass-dim)}
+    .result.err{background:linear-gradient(180deg, rgba(224,113,108,0.16), rgba(224,113,108,0.05));border:1.5px solid rgba(224,113,108,0.5)}
+    .seat-num{
+      display:inline-block;font-size:2.4rem;font-weight:800;color:var(--brass-bright);
+      font-variant-numeric:tabular-nums;margin:4px 0 12px;
+    }
+
+    /* ---------- Live section ---------- */
+    .live-links a{display:inline-block;margin-top:6px;font-weight:700}
+
+    /* ---------- Decline ---------- */
+    .decline-wrap{text-align:center;margin-top:30px}
+    .decline-confirm{
+      display:none;text-align:center;background:var(--ink-3);border:1.5px solid var(--garnet-line);
+      border-radius:14px;padding:20px;margin-top:14px;
+    }
+    .decline-confirm.show{display:block}
+    .decline-confirm p{color:var(--ivory-dim);margin:0 0 16px}
+    .decline-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+    footer{
+      margin-top:48px;padding-top:22px;border-top:1px solid var(--line);
+      color:var(--ivory-faint);font-size:0.95rem;text-align:center;
+    }
+    footer p{margin:0 0 10px}
+    footer a{color:var(--ivory-dim)}
+
+    [data-lang="en"]{display:none}
+    body.lang-en [data-lang="es"]{display:none}
+    body.lang-en [data-lang="en"]{display:block}
+    body.lang-en label[data-lang="en"], body.lang-en span[data-lang="en"]{display:inline}
+
+    @media (max-width:420px){
+      h1{font-size:1.7rem}
+      .phone-row{flex-direction:column}
+      .phone-row select{flex:1 1 auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="brandlink" href="/torneo/" aria-label="El Torneo I">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="6" fill="#7c1023"/><text x="50%" y="50%" font-family="system-ui,-apple-system,Arial,sans-serif" font-size="14" font-weight="800" fill="#e0bd6c" text-anchor="middle" dominant-baseline="central">IQ</text></svg>
+      El Torneo I
+    </a>
+    <div class="lang-toggle" role="group" aria-label="Idioma / Language">
+      <button type="button" id="lang-es" class="active" aria-pressed="true">ES</button>
+      <button type="button" id="lang-en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <main>
+      <header class="hero">
+        <span class="eyebrow" data-lang="es">Inscripción</span>
+        <span class="eyebrow" data-lang="en">Registration</span>
+        <h1 data-lang="es">Asegura tu puesto</h1>
+        <h1 data-lang="en">Claim your seat</h1>
+        <p class="datebar">VIERNES 28 DE AGOSTO &middot; 9:00&nbsp;PM ET</p>
+        <p class="lede" data-lang="es">16 jugadores, 4 mesas, 1 campeón. Llena el formulario y te confirmamos por WhatsApp.</p>
+        <p class="lede" data-lang="en">16 players, 4 tables, 1 champion. Fill this out and we confirm you over WhatsApp.</p>
+      </header>
+
+      <!-- ================= FORM ================= -->
+      <section id="form-section">
+        <div class="card">
+          <form id="regform" novalidate>
+            <div class="field" id="field-username">
+              <label for="username">
+                <span data-lang="es">Usuario en la app (@)</span>
+                <span data-lang="en">App username (@)</span>
+                <span class="opt" id="username-opt-tag"></span>
+              </label>
+              <input type="text" id="username" name="username" autocomplete="off" placeholder="@tuUsuario" />
+              <p class="field-error" data-es="Escribe tu usuario de la app." data-en="Enter your app username."></p>
+            </div>
+
+            <div class="field" id="field-name">
+              <label for="name" data-lang="es">Nombre</label>
+              <label for="name" data-lang="en">Name</label>
+              <input type="text" id="name" name="name" autocomplete="name" required minlength="2" maxlength="40" />
+              <p class="field-error" data-es="Escribe tu nombre (2 a 40 letras)." data-en="Enter your name (2 to 40 characters)."></p>
+            </div>
+
+            <div class="field" id="field-phone">
+              <label for="phone-raw" data-lang="es">Número de WhatsApp</label>
+              <label for="phone-raw" data-lang="en">WhatsApp number</label>
+              <div class="phone-row">
+                <select id="phone-country" name="phoneCountry" aria-label="País">
+                  <option value="+1" data-label-es="🇺🇸 +1" data-label-en="🇺🇸 +1" selected>🇺🇸 +1</option>
+                  <option value="+53" data-label-es="🇨🇺 +53" data-label-en="🇨🇺 +53">🇨🇺 +53</option>
+                  <option value="+52" data-label-es="🇲🇽 +52" data-label-en="🇲🇽 +52">🇲🇽 +52</option>
+                  <option value="+1-809" data-label-es="🇩🇴 +1-809" data-label-en="🇩🇴 +1-809">🇩🇴 +1-809</option>
+                  <option value="+34" data-label-es="🇪🇸 +34" data-label-en="🇪🇸 +34">🇪🇸 +34</option>
+                  <option value="other" data-label-es="Otro país…" data-label-en="Other country…">Otro país…</option>
+                </select>
+                <input type="tel" id="phone-raw" name="phoneRaw" inputmode="tel" autocomplete="tel" placeholder="305 555 1234" required />
+              </div>
+              <input type="text" id="phone-other-code" class="other-code" placeholder="+591" style="display:none" inputmode="tel" aria-label="Código de país" />
+              <p class="field-error" data-es="Escribe un número de WhatsApp válido." data-en="Enter a valid WhatsApp number."></p>
+            </div>
+
+            <div class="field" id="field-consent">
+              <div class="consent-row">
+                <input type="checkbox" id="consent" name="consentWhatsapp" required />
+                <label for="consent" data-lang="es">Acepto que me escriban por WhatsApp sobre EL TORNEO I</label>
+                <label for="consent" data-lang="en">I agree to be contacted on WhatsApp about EL TORNEO I</label>
+              </div>
+              <p class="field-error" data-es="Tienes que aceptar para inscribirte." data-en="You must agree to register."></p>
+            </div>
+
+            <button type="submit" class="primary" id="submit-btn">
+              <span data-lang="es">Confirmar mi puesto</span>
+              <span data-lang="en">Confirm my seat</span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- ================= RESULT ================= -->
+      <section id="result-section" aria-live="polite">
+        <div class="result" id="result-ok">
+          <div class="big-icon">✅</div>
+          <div class="seat-num" id="seat-num-out"></div>
+          <h2 data-lang="es">¡Puesto confirmado!</h2>
+          <h2 data-lang="en">Seat confirmed!</h2>
+          <p data-lang="es">Viernes 28, 9:00 PM ET. Te escribimos por WhatsApp con tu mesa y tu código a las 8:50.</p>
+          <p data-lang="en">Friday the 28th, 9:00 PM ET. We'll message you on WhatsApp with your table and code at 8:50.</p>
+        </div>
+        <div class="result" id="result-wait">
+          <div class="big-icon">🕓</div>
+          <h2 data-lang="es">Estás en la lista de espera</h2>
+          <h2 data-lang="en">You're on the waitlist</h2>
+          <p data-lang="es">Quédate cerca el viernes 9pm por si se abre un puesto.</p>
+          <p data-lang="en">Stay nearby Friday at 9pm in case a seat opens up.</p>
+        </div>
+        <div class="result" id="result-err">
+          <div class="big-icon">⚠️</div>
+          <h2 id="err-title-es" data-lang="es">No pudimos inscribirte</h2>
+          <h2 id="err-title-en" data-lang="en">We couldn't register you</h2>
+          <p id="err-body-es" data-lang="es"></p>
+          <p id="err-body-en" data-lang="en"></p>
+        </div>
+        <p style="text-align:center;margin-top:18px">
+          <button type="button" class="secondary" id="try-again-btn" style="display:none">
+            <span data-lang="es">Intentar de nuevo</span>
+            <span data-lang="en">Try again</span>
+          </button>
+        </p>
+      </section>
+
+      <!-- ================= CÓMO SEGUIR EN VIVO ================= -->
+      <section aria-labelledby="live-heading">
+        <div class="card live-links">
+          <h2 id="live-heading" style="font-size:1.3rem;margin:0 0 10px" data-lang="es">Cómo seguir el torneo en vivo</h2>
+          <h2 style="font-size:1.3rem;margin:0 0 10px" data-lang="en">How to follow the tournament live</h2>
+          <p data-lang="es">El cuadro se actualiza en vivo el viernes por la noche en <a href="/torneo/">iqdominoes.com/torneo</a> y en un aviso dentro de la app.</p>
+          <p data-lang="en">The bracket updates live Friday night at <a href="/torneo/">iqdominoes.com/torneo</a> and via an in-app banner.</p>
+          <a href="/torneo/">
+            <span data-lang="es">Ver El Torneo I &rarr;</span>
+            <span data-lang="en">View El Torneo I &rarr;</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ================= DECLINE (only shown with a token) ================= -->
+      <section id="decline-section" class="decline-wrap" style="display:none">
+        <button type="button" class="link-btn" id="decline-open-btn">
+          <span data-lang="es">No puedo ir &rarr; liberar mi puesto</span>
+          <span data-lang="en">Can't make it &rarr; release my seat</span>
+        </button>
+        <div class="decline-confirm" id="decline-confirm">
+          <p data-lang="es">¿Seguro que quieres liberar tu puesto? Otra persona lo podrá tomar.</p>
+          <p data-lang="en">Are you sure you want to release your seat? Someone else will be able to take it.</p>
+          <div class="decline-actions">
+            <button type="button" class="secondary" id="decline-cancel-btn">
+              <span data-lang="es">Cancelar</span>
+              <span data-lang="en">Cancel</span>
+            </button>
+            <button type="button" class="primary" id="decline-confirm-btn" style="width:auto;padding:0 22px">
+              <span data-lang="es">Sí, liberar mi puesto</span>
+              <span data-lang="en">Yes, release my seat</span>
+            </button>
+          </div>
+        </div>
+        <div class="result wait" id="decline-done" style="margin-top:16px">
+          <div class="big-icon">👋</div>
+          <h2 data-lang="es">Listo, liberamos tu puesto</h2>
+          <h2 data-lang="en">Done, your seat is released</h2>
+          <p data-lang="es">Gracias por avisar.</p>
+          <p data-lang="en">Thanks for letting us know.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p data-lang="es">¿Problemas? Escríbenos a <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a></p>
+      <p data-lang="en">Trouble? Email us at <a href="mailto:admin@iqdominoes.com">admin@iqdominoes.com</a></p>
+      <p>&copy; 2026 Global Data and Consulting Solutions, LLC.</p>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    // ============= API CONTRACT — the one place to change ============
+    // If the server worker's exact shapes differ, only this object and the
+    // two `handleRegisterResponse` / `handleDeclineResponse` functions
+    // below need to change. Every field is feature-detected on read.
+    var API = {
+      base: 'https://api.iqdominoes.com',
+      register: '/api/torneo/register',   // POST {token?, username?, name, phoneCountry, phoneRaw, consentWhatsapp:true, consentTextVersion:'torneo-v1', locale}
+      decline: '/api/torneo/decline'       // POST {token}
+      // Expected 2xx body (defensive reads only): { ok, status, seat? }
+      //   status one of: 'confirmed' | 'seated' | 'registered' | 'waitlisted'
+      //   ('confirmed'/'seated' + numeric seat => seat banner; anything else => waitlist banner, no position shown)
+      // Errors: 409 = phone already registered to a different id; 429 = rate-limited; other/network/5xx = static fallback.
+    };
+    var CONSENT_VERSION = 'torneo-v1';
+
+    // ============= Language toggle =============
+    var body = document.body;
+    var btnEs = document.getElementById('lang-es');
+    var btnEn = document.getElementById('lang-en');
+    function setLang(lang) {
+      var isEn = lang === 'en';
+      body.classList.toggle('lang-en', isEn);
+      document.documentElement.lang = isEn ? 'en' : 'es';
+      btnEs.classList.toggle('active', !isEn);
+      btnEn.classList.toggle('active', isEn);
+      btnEs.setAttribute('aria-pressed', String(!isEn));
+      btnEn.setAttribute('aria-pressed', String(isEn));
+      // country-select option labels swap too
+      var opts = document.querySelectorAll('#phone-country option');
+      for (var i = 0; i < opts.length; i++) {
+        var o = opts[i];
+        var lbl = isEn ? o.getAttribute('data-label-en') : o.getAttribute('data-label-es');
+        if (lbl) o.textContent = lbl;
+      }
+      // Elements with a fixed visibility state of their own (field-error
+      // messages, which toggle via .has-error, not via data-lang display)
+      // get their text swapped directly instead of using the data-lang
+      // show/hide mechanism, so their hidden-by-default state is preserved.
+      var i18nTextEls = document.querySelectorAll('[data-es][data-en]');
+      for (var j = 0; j < i18nTextEls.length; j++) {
+        var el = i18nTextEls[j];
+        el.textContent = isEn ? el.getAttribute('data-en') : el.getAttribute('data-es');
+      }
+      try { localStorage.setItem('torneo_lang', lang); } catch (e) {}
+    }
+    btnEs.addEventListener('click', function () { setLang('es'); });
+    btnEn.addEventListener('click', function () { setLang('en'); });
+    (function initLang() {
+      var pref = null;
+      try { pref = localStorage.getItem('torneo_lang'); } catch (e) {}
+      if (!pref) {
+        var nav = (navigator.language || '').toLowerCase();
+        pref = nav.indexOf('es') === 0 ? 'es' : (nav ? 'es' : 'es'); // Spanish-first always by default
+      }
+      setLang(pref === 'en' ? 'en' : 'es');
+    })();
+    function currentLocale() { return body.classList.contains('lang-en') ? 'en' : 'es'; }
+
+    // ============= Token: read then strip from URL (A4) =============
+    var params = new URLSearchParams(location.search);
+    var TOKEN = params.get('t') || null;
+    if (TOKEN) {
+      try {
+        var cleanUrl = location.pathname + (location.hash || '');
+        history.replaceState(null, '', cleanUrl);
+      } catch (e) {}
+    }
+
+    // ============= Username requirement toggles with token presence =============
+    var usernameInput = document.getElementById('username');
+    var usernameOptTag = document.getElementById('username-opt-tag');
+    if (TOKEN) {
+      usernameInput.removeAttribute('required');
+      usernameOptTag.setAttribute('data-lang', 'es');
+      usernameOptTag.textContent = '';
+      usernameOptTag.innerHTML = '<span data-lang="es">(opcional)</span><span data-lang="en">(optional)</span>';
+    } else {
+      usernameInput.setAttribute('required', 'required');
+      usernameOptTag.innerHTML = '<span data-lang="es">(obligatorio)</span><span data-lang="en">(required)</span>';
+    }
+
+    // Decline section only shows with a token
+    if (TOKEN) {
+      document.getElementById('decline-section').style.display = '';
+    }
+
+    // ============= Phone country "other" toggle =============
+    var countrySelect = document.getElementById('phone-country');
+    var otherCodeInput = document.getElementById('phone-other-code');
+    countrySelect.addEventListener('change', function () {
+      otherCodeInput.style.display = countrySelect.value === 'other' ? '' : 'none';
+    });
+
+    // ============= Validation helpers =============
+    function setFieldError(fieldId, on) {
+      var el = document.getElementById(fieldId);
+      if (el) el.classList.toggle('has-error', !!on);
+    }
+    function digitsOnly(s) { return (s || '').replace(/[^0-9]/g, ''); }
+
+    function validate() {
+      var ok = true;
+      var name = document.getElementById('name').value.trim();
+      if (name.length < 2 || name.length > 40) { setFieldError('field-name', true); ok = false; }
+      else setFieldError('field-name', false);
+
+      if (usernameInput.hasAttribute('required')) {
+        var u = usernameInput.value.trim().replace(/^@/, '');
+        if (u.length < 2) { setFieldError('field-username', true); ok = false; }
+        else setFieldError('field-username', false);
+      } else {
+        setFieldError('field-username', false);
+      }
+
+      var rawPhone = document.getElementById('phone-raw').value;
+      var phoneDigits = digitsOnly(rawPhone);
+      var countryVal = countrySelect.value;
+      var countryCode = countryVal === 'other' ? digitsOnly(otherCodeInput.value) : digitsOnly(countryVal);
+      var totalDigits = (countryCode + phoneDigits).length;
+      if (phoneDigits.length < 6 || totalDigits < 8 || totalDigits > 15) { setFieldError('field-phone', true); ok = false; }
+      else setFieldError('field-phone', false);
+
+      var consent = document.getElementById('consent').checked;
+      if (!consent) { setFieldError('field-consent', true); ok = false; }
+      else setFieldError('field-consent', false);
+
+      return ok;
+    }
+
+    // ============= Result banners =============
+    var resultOk = document.getElementById('result-ok');
+    var resultWait = document.getElementById('result-wait');
+    var resultErr = document.getElementById('result-err');
+    var tryAgainBtn = document.getElementById('try-again-btn');
+    var formSection = document.getElementById('form-section');
+
+    function hideAllResults() {
+      resultOk.classList.remove('show');
+      resultWait.classList.remove('show');
+      resultErr.classList.remove('show');
+      tryAgainBtn.style.display = 'none';
+    }
+
+    function showSeatConfirmed(seat) {
+      hideAllResults();
+      formSection.style.display = 'none';
+      var seatOut = document.getElementById('seat-num-out');
+      seatOut.textContent = (typeof seat === 'number' && isFinite(seat)) ? ('#' + seat) : '';
+      resultOk.classList.add('show');
+    }
+
+    function showWaitlisted() {
+      hideAllResults();
+      formSection.style.display = 'none';
+      resultWait.classList.add('show');
+    }
+
+    function showError(esMsg, enMsg, allowRetry) {
+      hideAllResults();
+      document.getElementById('err-body-es').textContent = esMsg;
+      document.getElementById('err-body-en').textContent = enMsg;
+      resultErr.classList.add('show');
+      if (allowRetry) tryAgainBtn.style.display = '';
+    }
+
+    tryAgainBtn.addEventListener('click', function () {
+      hideAllResults();
+      formSection.style.display = '';
+    });
+
+    // ============= Register submit =============
+    var form = document.getElementById('regform');
+    var submitBtn = document.getElementById('submit-btn');
+
+    function buildPayload() {
+      var countryVal = countrySelect.value;
+      var phoneCountry = countryVal === 'other' ? (otherCodeInput.value.trim() || '+') : countryVal;
+      var payload = {
+        name: document.getElementById('name').value.trim(),
+        phoneCountry: phoneCountry,
+        phoneRaw: document.getElementById('phone-raw').value.trim(),
+        consentWhatsapp: true,
+        consentTextVersion: CONSENT_VERSION,
+        locale: currentLocale()
+      };
+      if (TOKEN) payload.token = TOKEN;
+      var uname = usernameInput.value.trim().replace(/^@/, '');
+      if (uname) payload.username = uname;
+      return payload;
+    }
+
+    // Defensive read of a 2xx body: any of these shapes is accepted.
+    function handleRegisterResponse(status, json) {
+      if (status === 409) {
+        showError(
+          'Ese número de WhatsApp ya está registrado con otra cuenta. Si crees que es un error, escríbenos a admin@iqdominoes.com.',
+          'That WhatsApp number is already registered to a different account. If you think this is a mistake, email admin@iqdominoes.com.',
+          true
+        );
+        return;
+      }
+      if (status === 429) {
+        showError(
+          'Espera un minuto e inténtalo de nuevo.',
+          'Please wait a minute and try again.',
+          true
+        );
+        return;
+      }
+      if (status >= 200 && status < 300 && json && typeof json === 'object') {
+        var st = String(json.status || '').toLowerCase();
+        var seat = (typeof json.seat === 'number') ? json.seat : null;
+        var confirmedLike = st === 'confirmed' || st === 'seated' || (seat !== null && st !== 'waitlisted');
+        if (confirmedLike && seat !== null) {
+          showSeatConfirmed(seat);
+        } else {
+          // covers waitlisted, expired-window-became-waitlist, registered-no-seat-yet
+          showWaitlisted();
+        }
+        return;
+      }
+      // Any other non-2xx / malformed body -> static fallback
+      showError(
+        'No pudimos conectar ahora mismo. Escríbenos a admin@iqdominoes.com y te confirmamos tu puesto a mano.',
+        "We couldn't connect right now. Email admin@iqdominoes.com and we'll confirm your seat by hand.",
+        true
+      );
+    }
+
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (!validate()) return;
+      submitBtn.disabled = true;
+      var payload = buildPayload();
+      var timer = setTimeout(function () {
+        // Hard timeout fallback so a hung request never leaves grandma staring at a spinner.
+        submitBtn.disabled = false;
+        showError(
+          'No pudimos conectar ahora mismo. Escríbenos a admin@iqdominoes.com y te confirmamos tu puesto a mano.',
+          "We couldn't connect right now. Email admin@iqdominoes.com and we'll confirm your seat by hand.",
+          true
+        );
+      }, 12000);
+
+      fetch(API.base + API.register, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (resp) {
+        clearTimeout(timer);
+        submitBtn.disabled = false;
+        resp.json().then(function (json) {
+          handleRegisterResponse(resp.status, json);
+        }, function () {
+          handleRegisterResponse(resp.status, null);
+        });
+      }, function () {
+        clearTimeout(timer);
+        submitBtn.disabled = false;
+        showError(
+          'No pudimos conectar ahora mismo. Escríbenos a admin@iqdominoes.com y te confirmamos tu puesto a mano.',
+          "We couldn't connect right now. Email admin@iqdominoes.com and we'll confirm your seat by hand.",
+          true
+        );
+      });
+    });
+
+    // ============= Decline flow (token only) =============
+    var declineOpenBtn = document.getElementById('decline-open-btn');
+    var declineConfirm = document.getElementById('decline-confirm');
+    var declineCancelBtn = document.getElementById('decline-cancel-btn');
+    var declineConfirmBtn = document.getElementById('decline-confirm-btn');
+    var declineDone = document.getElementById('decline-done');
+
+    if (declineOpenBtn) {
+      declineOpenBtn.addEventListener('click', function () {
+        declineConfirm.classList.add('show');
+        declineOpenBtn.style.display = 'none';
+      });
+      declineCancelBtn.addEventListener('click', function () {
+        declineConfirm.classList.remove('show');
+        declineOpenBtn.style.display = '';
+      });
+      declineConfirmBtn.addEventListener('click', function () {
+        declineConfirmBtn.disabled = true;
+        fetch(API.base + API.decline, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: TOKEN })
+        }).then(function () {
+          declineConfirm.classList.remove('show');
+          declineDone.classList.add('show');
+        }, function () {
+          declineConfirmBtn.disabled = false;
+          declineConfirm.classList.remove('show');
+          declineOpenBtn.style.display = '';
+          alert(currentLocale() === 'en'
+            ? "We couldn't reach the server. Email admin@iqdominoes.com to release your seat."
+            : 'No pudimos conectar. Escríbenos a admin@iqdominoes.com para liberar tu puesto.');
+        });
+      });
+    }
+  })();
+  </script>
+</body>
+</html>
