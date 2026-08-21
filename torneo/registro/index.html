@@ -592,11 +592,21 @@
 
     function buildPayload() {
       var countryVal = countrySelect.value;
-      var phoneCountry = countryVal === 'other' ? (otherCodeInput.value.trim() || '+') : countryVal;
+      // Server contract (torneoPhone.ts): phoneCountry is an ISO code US/CU/MX/DO/ES/'other',
+      // NOT a dial code. For 'other' the server refuses to guess — send phoneRaw as full E.164.
+      // (08-21 bug: we posted '+1' → libphonenumber threw → every submit failed 'invalid'.)
+      var ISO = { '+1': 'US', '+53': 'CU', '+52': 'MX', '+1-809': 'DO', '+34': 'ES' };
+      var phoneCountry = countryVal === 'other' ? 'other' : (ISO[countryVal] || 'other');
+      var rawDigits = document.getElementById('phone-raw').value.trim();
+      var phoneRaw = rawDigits;
+      if (phoneCountry === 'other') {
+        var dial = '+' + digitsOnly(countryVal === 'other' ? otherCodeInput.value : countryVal);
+        phoneRaw = rawDigits.charAt(0) === '+' ? rawDigits : dial + digitsOnly(rawDigits);
+      }
       var payload = {
         name: document.getElementById('name').value.trim(),
         phoneCountry: phoneCountry,
-        phoneRaw: document.getElementById('phone-raw').value.trim(),
+        phoneRaw: phoneRaw,
         consentWhatsapp: true,
         consentTextVersion: CONSENT_VERSION,
         locale: currentLocale()
