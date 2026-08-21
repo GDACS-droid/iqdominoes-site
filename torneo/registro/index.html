@@ -116,6 +116,15 @@
     .field.has-error input, .field.has-error select{border-color:var(--bad)}
     .field.has-error .field-error{display:block}
 
+    /* ---------- OTP step ---------- */
+    #otp-section p.otp-lede{color:var(--ivory-dim);margin:0 0 20px;font-size:1.05rem}
+    input.otp-box{
+      font-size:2.6rem;font-weight:800;text-align:center;letter-spacing:0.5em;
+      padding-left:0.6em; /* re-center the trailing letter-spacing gap */
+      font-variant-numeric:tabular-nums;
+    }
+    #otp-resend-btn:disabled{color:var(--ivory-faint);cursor:default;text-decoration:none}
+
     .consent-row{
       display:flex;gap:14px;align-items:flex-start;background:var(--ink-3);
       border:1.5px solid var(--line);border-radius:12px;padding:16px;
@@ -272,6 +281,30 @@
         </div>
       </section>
 
+      <!-- ================= OTP STEP (only for @username path) ================= -->
+      <section id="otp-section" style="display:none">
+        <div class="card">
+          <p class="otp-lede" data-lang="es">Te mandamos un código de 4 dígitos a tu teléfono (notificación de IQ Dominó). Escríbelo aquí:</p>
+          <p class="otp-lede" data-lang="en">We sent a 4-digit code to your phone (IQ Dominó app notification). Enter it here:</p>
+          <div class="field" id="field-otp">
+            <label for="otp-input" data-lang="es">Código de 4 dígitos</label>
+            <label for="otp-input" data-lang="en">4-digit code</label>
+            <input type="text" id="otp-input" name="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="4" pattern="[0-9]*" class="otp-box" placeholder="0000" />
+            <p class="field-error" id="otp-error"></p>
+          </div>
+          <button type="button" class="primary" id="otp-confirm-btn">
+            <span data-lang="es">Confirmar</span>
+            <span data-lang="en">Confirm</span>
+          </button>
+          <p style="text-align:center;margin-top:14px">
+            <button type="button" class="link-btn" id="otp-resend-btn">
+              <span data-lang="es">Reenviar código</span>
+              <span data-lang="en">Resend code</span>
+            </button>
+          </p>
+        </div>
+      </section>
+
       <!-- ================= RESULT ================= -->
       <section id="result-section" aria-live="polite">
         <div class="result" id="result-ok">
@@ -288,6 +321,10 @@
           <h2 data-lang="en">You're on the waitlist</h2>
           <p data-lang="es">Quédate cerca el viernes 9pm por si se abre un puesto.</p>
           <p data-lang="en">Stay nearby Friday at 9pm in case a seat opens up.</p>
+          <div id="wait-unreachable-note" style="display:none">
+            <p data-lang="es">No pudimos verificar tu usuario en la app; quedaste en lista de espera.</p>
+            <p data-lang="en">We couldn't verify your app username; you're on the waitlist.</p>
+          </div>
         </div>
         <div class="result" id="result-err">
           <div class="big-icon">⚠️</div>
@@ -365,12 +402,26 @@
     // below need to change. Every field is feature-detected on read.
     var API = {
       base: 'https://api.iqdominoes.com',
-      register: '/api/torneo/register',   // POST {token?, username?, name, phoneCountry, phoneRaw, consentWhatsapp:true, consentTextVersion:'torneo-v1', locale}
+      register: '/api/torneo/register',   // POST {token?, username?, otp?, name, phoneCountry, phoneRaw, consentWhatsapp:true, consentTextVersion:'torneo-v1', locale}
       decline: '/api/torneo/decline'       // POST {token}
-      // Expected 2xx body (defensive reads only): { ok, status, seat? }
+      // Expected 2xx body (defensive reads only): { ok, status, seat?, reason? }
       //   status one of: 'confirmed' | 'seated' | 'registered' | 'waitlisted'
       //   ('confirmed'/'seated' + numeric seat => seat banner; anything else => waitlist banner, no position shown)
+      //   waitlisted + reason:'unreachable' => waitlist banner + "couldn't verify your app username" line
       // Errors: 409 = phone already registered to a different id; 429 = rate-limited; other/network/5xx = static fallback.
+      //
+      // OTP step (@username path only, no token): when the body has `username`
+      // and no `token`, the server MAY answer 202 {ok:true, status:'otp_sent',
+      // otpRequired:true} instead of a normal 2xx — it just pushed a 4-digit
+      // code to the user's phone via an IQ Dominó app notification. The page
+      // then shows the OTP step and re-POSTs the SAME body plus `otp:'1234'`.
+      //   Confirm-step responses:
+      //     200 + normal status body -> same handling as the non-OTP path
+      //     400 {reason:'otp_invalid', attemptsLeft?} -> inline "wrong code" error
+      //     410 {reason:'otp_expired'|'otp_burned'} -> "code expired" + resend
+      //     429 -> rate-limit wait copy
+      //   Resend re-POSTs the original body (no otp) expecting another 202;
+      //   button is disabled for 60s after each send.
     };
     var CONSENT_VERSION = 'torneo-v1';
 
@@ -494,6 +545,8 @@
     var resultErr = document.getElementById('result-err');
     var tryAgainBtn = document.getElementById('try-again-btn');
     var formSection = document.getElementById('form-section');
+    var otpSection = document.getElementById('otp-section');
+    var waitUnreachableNote = document.getElementById('wait-unreachable-note');
 
     function hideAllResults() {
       resultOk.classList.remove('show');
@@ -505,19 +558,23 @@
     function showSeatConfirmed(seat) {
       hideAllResults();
       formSection.style.display = 'none';
+      otpSection.style.display = 'none';
       var seatOut = document.getElementById('seat-num-out');
       seatOut.textContent = (typeof seat === 'number' && isFinite(seat)) ? ('#' + seat) : '';
       resultOk.classList.add('show');
     }
 
-    function showWaitlisted() {
+    function showWaitlisted(reason) {
       hideAllResults();
       formSection.style.display = 'none';
+      otpSection.style.display = 'none';
+      waitUnreachableNote.style.display = (reason === 'unreachable') ? '' : 'none';
       resultWait.classList.add('show');
     }
 
     function showError(esMsg, enMsg, allowRetry) {
       hideAllResults();
+      otpSection.style.display = 'none';
       document.getElementById('err-body-es').textContent = esMsg;
       document.getElementById('err-body-en').textContent = enMsg;
       resultErr.classList.add('show');
@@ -576,7 +633,8 @@
           showSeatConfirmed(seat);
         } else {
           // covers waitlisted, expired-window-became-waitlist, registered-no-seat-yet
-          showWaitlisted();
+          var reason = String(json.reason || '').toLowerCase();
+          showWaitlisted(reason === 'unreachable' ? 'unreachable' : null);
         }
         return;
       }
@@ -588,41 +646,198 @@
       );
     }
 
-    form.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      if (!validate()) return;
-      submitBtn.disabled = true;
-      var payload = buildPayload();
+    // Shared POST helper (used by the initial submit, OTP confirm, and OTP
+    // resend). `cb(status, json)` always fires exactly once; a hard 12s
+    // timeout calls back with status -1 so a hung request never leaves
+    // grandma staring at a spinner.
+    function postRegister(payload, cb) {
+      var settled = false;
       var timer = setTimeout(function () {
-        // Hard timeout fallback so a hung request never leaves grandma staring at a spinner.
-        submitBtn.disabled = false;
-        showError(
-          'No pudimos conectar ahora mismo. Escríbenos a admin@iqdominoes.com y te confirmamos tu puesto a mano.',
-          "We couldn't connect right now. Email admin@iqdominoes.com and we'll confirm your seat by hand.",
-          true
-        );
+        if (settled) return;
+        settled = true;
+        cb(-1, null);
       }, 12000);
-
       fetch(API.base + API.register, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       }).then(function (resp) {
-        clearTimeout(timer);
-        submitBtn.disabled = false;
         resp.json().then(function (json) {
-          handleRegisterResponse(resp.status, json);
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          cb(resp.status, json);
         }, function () {
-          handleRegisterResponse(resp.status, null);
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          cb(resp.status, null);
         });
       }, function () {
+        if (settled) return;
+        settled = true;
         clearTimeout(timer);
+        cb(-1, null);
+      });
+    }
+
+    function isOtpSentResponse(status, json) {
+      return status === 202 && json && typeof json === 'object' &&
+        (json.otpRequired === true || String(json.status || '').toLowerCase() === 'otp_sent');
+    }
+
+    // ============= OTP step (@username path only) =============
+    var otpInput = document.getElementById('otp-input');
+    var otpError = document.getElementById('otp-error');
+    var otpConfirmBtn = document.getElementById('otp-confirm-btn');
+    var otpResendBtn = document.getElementById('otp-resend-btn');
+    var otpResendEsSpan = otpResendBtn.querySelector('[data-lang="es"]');
+    var otpResendEnSpan = otpResendBtn.querySelector('[data-lang="en"]');
+    var pendingPayload = null; // the last body sent WITHOUT an otp field, reused for confirm/resend
+    var resendTimerId = null;
+
+    function otpBaseLabel(isEn) { return isEn ? 'Resend code' : 'Reenviar código'; }
+    function updateResendLabel(seconds) {
+      otpResendEsSpan.textContent = seconds > 0 ? (otpBaseLabel(false) + ' (' + seconds + 's)') : otpBaseLabel(false);
+      otpResendEnSpan.textContent = seconds > 0 ? (otpBaseLabel(true) + ' (' + seconds + 's)') : otpBaseLabel(true);
+    }
+    function startResendCooldown() {
+      clearInterval(resendTimerId);
+      var seconds = 60;
+      otpResendBtn.disabled = true;
+      updateResendLabel(seconds);
+      resendTimerId = setInterval(function () {
+        seconds -= 1;
+        if (seconds <= 0) {
+          clearInterval(resendTimerId);
+          otpResendBtn.disabled = false;
+          updateResendLabel(0);
+        } else {
+          updateResendLabel(seconds);
+        }
+      }, 1000);
+    }
+
+    function setOtpError(esMsg, enMsg) {
+      otpError.textContent = currentLocale() === 'en' ? enMsg : esMsg;
+      otpError.setAttribute('data-es', esMsg);
+      otpError.setAttribute('data-en', enMsg);
+      setFieldError('field-otp', true);
+    }
+    function clearOtpError() { setFieldError('field-otp', false); }
+
+    function showOtpStep(payload) {
+      pendingPayload = payload;
+      hideAllResults();
+      formSection.style.display = 'none';
+      otpSection.style.display = '';
+      otpInput.value = '';
+      clearOtpError();
+      startResendCooldown();
+      otpInput.focus();
+    }
+
+    function copyPayload(src) {
+      var out = {};
+      for (var k in src) { if (Object.prototype.hasOwnProperty.call(src, k)) out[k] = src[k]; }
+      return out;
+    }
+
+    function handleOtpConfirmResponse(status, json) {
+      if (status === 400 && json && String(json.reason || '').toLowerCase() === 'otp_invalid') {
+        var attemptsLeft = (typeof json.attemptsLeft === 'number') ? json.attemptsLeft : null;
+        if (attemptsLeft !== null) {
+          setOtpError(
+            'Código incorrecto, te quedan ' + attemptsLeft + ' intento' + (attemptsLeft === 1 ? '' : 's') + '.',
+            'Incorrect code, you have ' + attemptsLeft + ' attempt' + (attemptsLeft === 1 ? '' : 's') + ' left.'
+          );
+        } else {
+          setOtpError('Código incorrecto.', 'Incorrect code.');
+        }
+        return;
+      }
+      if (status === 410 && json) {
+        var reason410 = String(json.reason || '').toLowerCase();
+        if (reason410 === 'otp_expired' || reason410 === 'otp_burned') {
+          setOtpError('Código vencido — pide otro.', 'Code expired — request a new one.');
+          return;
+        }
+      }
+      if (status === 429) {
+        setOtpError('Espera un minuto e inténtalo de nuevo.', 'Please wait a minute and try again.');
+        return;
+      }
+      if (status >= 200 && status < 300 && json && typeof json === 'object') {
+        clearInterval(resendTimerId);
+        handleRegisterResponse(status, json);
+        return;
+      }
+      // network/timeout/malformed body -> stay on the OTP step so they can retry
+      setOtpError(
+        'No pudimos conectar ahora mismo. Inténtalo de nuevo.',
+        "We couldn't connect right now. Please try again."
+      );
+    }
+
+    function submitOtp() {
+      var code = otpInput.value.trim();
+      if (!/^[0-9]{4}$/.test(code)) {
+        setOtpError('Escribe los 4 dígitos del código.', 'Enter the 4-digit code.');
+        return;
+      }
+      clearOtpError();
+      otpConfirmBtn.disabled = true;
+      var payload = copyPayload(pendingPayload);
+      payload.otp = code;
+      postRegister(payload, function (status, json) {
+        otpConfirmBtn.disabled = false;
+        handleOtpConfirmResponse(status, json);
+      });
+    }
+
+    otpConfirmBtn.addEventListener('click', submitOtp);
+    otpInput.addEventListener('input', function () {
+      otpInput.value = otpInput.value.replace(/[^0-9]/g, '').slice(0, 4);
+    });
+    otpInput.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter') { ev.preventDefault(); submitOtp(); }
+    });
+    otpResendBtn.addEventListener('click', function () {
+      if (otpResendBtn.disabled || !pendingPayload) return;
+      otpResendBtn.disabled = true;
+      var payload = copyPayload(pendingPayload);
+      delete payload.otp;
+      postRegister(payload, function (status, json) {
+        if (isOtpSentResponse(status, json) || (status >= 200 && status < 300)) {
+          clearOtpError();
+          otpInput.value = '';
+          startResendCooldown();
+        } else if (status === 429) {
+          setOtpError('Espera un minuto e inténtalo de nuevo.', 'Please wait a minute and try again.');
+          otpResendBtn.disabled = false;
+        } else {
+          setOtpError(
+            'No pudimos reenviar el código. Inténtalo de nuevo.',
+            "We couldn't resend the code. Please try again."
+          );
+          otpResendBtn.disabled = false;
+        }
+      });
+    });
+
+    // ============= Main form submit =============
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (!validate()) return;
+      submitBtn.disabled = true;
+      var payload = buildPayload();
+      postRegister(payload, function (status, json) {
         submitBtn.disabled = false;
-        showError(
-          'No pudimos conectar ahora mismo. Escríbenos a admin@iqdominoes.com y te confirmamos tu puesto a mano.',
-          "We couldn't connect right now. Email admin@iqdominoes.com and we'll confirm your seat by hand.",
-          true
-        );
+        if (isOtpSentResponse(status, json)) {
+          showOtpStep(payload);
+          return;
+        }
+        handleRegisterResponse(status, json);
       });
     });
 
