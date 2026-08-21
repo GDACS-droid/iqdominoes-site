@@ -108,6 +108,11 @@
       color:var(--ivory);font-family:inherit;
     }
     input::placeholder{color:var(--ivory-faint)}
+    /* permanent, undeletable @ — lives OUTSIDE the input so it can never be erased */
+    .at-wrap{position:relative}
+    .at-wrap .at-prefix{position:absolute;left:16px;top:50%;transform:translateY(-50%);
+      font-size:1.15rem;color:var(--brass-bright);font-weight:700;pointer-events:none;user-select:none}
+    .at-wrap input{padding-left:40px}
     .phone-row{display:flex;gap:10px}
     .phone-row select{flex:0 0 148px;min-width:0}
     .phone-row input{flex:1;min-width:0}
@@ -231,11 +236,14 @@
           <form id="regform" novalidate>
             <div class="field" id="field-username">
               <label for="username">
-                <span data-lang="es">Usuario en la app (@)</span>
-                <span data-lang="en">App username (@)</span>
+                <span data-lang="es">Usuario en la app</span>
+                <span data-lang="en">App username</span>
                 <span class="opt" id="username-opt-tag"></span>
               </label>
-              <input type="text" id="username" name="username" autocomplete="off" placeholder="@tuUsuario" />
+              <div class="at-wrap">
+                <span class="at-prefix" aria-hidden="true">@</span>
+                <input type="text" id="username" name="username" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="tuUsuario" />
+              </div>
               <p class="field-error" data-es="Escribe tu usuario de la app." data-en="Enter your app username."></p>
             </div>
 
@@ -480,6 +488,15 @@
 
     // ============= Username requirement toggles with token presence =============
     var usernameInput = document.getElementById('username');
+    // The @ is drawn as a fixed prefix; if someone types/pastes one anyway, drop it.
+    usernameInput.addEventListener('input', function () {
+      if (usernameInput.value.indexOf('@') !== -1) {
+        var pos = usernameInput.selectionStart;
+        var before = usernameInput.value.slice(0, pos).replace(/@/g, '');
+        usernameInput.value = usernameInput.value.replace(/@/g, '');
+        try { usernameInput.setSelectionRange(before.length, before.length); } catch (e) {}
+      }
+    });
     var usernameOptTag = document.getElementById('username-opt-tag');
     if (TOKEN) {
       usernameInput.removeAttribute('required');
