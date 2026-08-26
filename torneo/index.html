@@ -730,6 +730,12 @@
         var opts = ac ? { signal: ac.signal } : {};
         fetch(url, opts).then(function (resp) {
           clearTimeout(timer);
+          if (resp.status === 404) {
+            // Empty body on 404 — resolve without touching .json(), which
+            // throws on an empty payload. Callers check status === 404.
+            resolve({ status: resp.status, json: null });
+            return;
+          }
           resp.json().then(function (json) {
             resolve({ status: resp.status, json: json });
           }, function (err) { reject(err); });
@@ -881,6 +887,23 @@
         TORNFIN: 'FIN', TORNFIN2: 'FIN'
       };
       var TARGET_HANDS = { A: 3, B: 3, C: 3, D: 3, FIN: 5 };
+      var MESA_LETTERS = ['A', 'B', 'C', 'D'];
+
+      // Server codes (torneoEngine.projectLiveBracket) are random 6-char join
+      // codes, never the literal TORN1A.. strings CODE_TO_MESA expects — so
+      // resolve real traffic by round label + tableNo instead. `round` is
+      // `round.label` from the engine: 'Ronda 1' (tableNo 1..4 -> A..D) or
+      // 'Final' (single table -> FIN). CODE_TO_MESA stays as a fallback so
+      // the DEMO fixture (which only carries `code`) still renders.
+      function resolveMesaKey(match) {
+        if (typeof match.round === 'string' && /final/i.test(match.round)) return 'FIN';
+        if (typeof match.round === 'string' && typeof match.tableNo === 'number') {
+          var idx = match.tableNo - 1;
+          if (idx >= 0 && idx < MESA_LETTERS.length) return MESA_LETTERS[idx];
+          return null;
+        }
+        return (typeof match.code === 'string') ? CODE_TO_MESA[match.code] : null;
+      }
 
       var cards = {};
       var cardNodes = bracket.querySelectorAll('[data-mesa]');
@@ -995,8 +1018,8 @@
         var byMesa = {};
         for (var i = 0; i < data.matches.length; i++) {
           var m = data.matches[i];
-          if (!m || typeof m.code !== 'string') continue;
-          var mesaKey = CODE_TO_MESA[m.code];
+          if (!m || typeof m !== 'object') continue;
+          var mesaKey = resolveMesaKey(m);
           if (!mesaKey) continue;
           byMesa[mesaKey] = pickLatest(byMesa[mesaKey], m);
         }
