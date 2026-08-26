@@ -354,6 +354,16 @@
     .pip-dot{width:7px;height:7px;border-radius:50%;background:rgba(240,231,213,0.18);display:inline-block}
     .pip-dot.filled{background:var(--brass-bright)}
     .mesa-degraded-note{display:block;color:var(--ivory-faint);font-size:0.72rem;font-style:italic;margin-top:6px}
+    .mesa-watch{
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      min-height:44px;margin-top:10px;padding:6px 10px;
+      font-size:0.95rem;font-weight:700;color:var(--brass-bright);
+      text-decoration:none;border:1px solid var(--brass-dim);border-radius:10px;
+      background:rgba(199,162,80,0.08);
+    }
+    .mesa-watch:hover{background:rgba(199,162,80,0.16)}
+    .mesa-watch:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
+    .bracket-note{text-align:center;color:var(--ivory-faint);font-size:0.82rem;font-style:italic;margin-top:10px}
     .bracket-updated{text-align:center;color:var(--ivory-faint);font-size:0.78rem;margin-top:12px}
     .plaque-empty.crowned{font-style:normal;color:var(--brass-bright);font-weight:800}
     .demo-badge{
@@ -606,6 +616,7 @@
             <div class="mesa-players" data-role="players" hidden></div>
           </div>
         </div>
+        <p class="bracket-note">Para mirar una mesa necesitas la app (v2.11 o más nueva).</p>
         <p class="bracket-updated" id="bracket-updated" hidden></p>
       </section>
 
@@ -979,6 +990,23 @@
         }
         if (players.length) playersEl.hidden = false;
 
+        // Watch link (T3.1): only when the server flags this table as
+        // spectate-able (live match resolved for its code). Absent/falsy
+        // `watch` on older servers must render nothing, never throw.
+        var watchLink = card.querySelector('.mesa-watch');
+        if (match.watch === true && typeof match.code === 'string' && match.code) {
+          if (!watchLink) {
+            watchLink = document.createElement('a');
+            watchLink.className = 'mesa-watch';
+            card.appendChild(watchLink);
+          }
+          watchLink.href = '/join/' + encodeURIComponent(match.code);
+          watchLink.textContent = 'Ver esta mesa en la app →';
+          watchLink.hidden = false;
+        } else if (watchLink) {
+          watchLink.hidden = true;
+        }
+
         return status === 'playing';
       }
 
@@ -1056,7 +1084,7 @@
               winnerAlias: 'Ana'
             },
             {
-              code: 'TORN1B', status: 'playing',
+              code: 'TORN1B', status: 'playing', watch: true,
               players: [
                 { seat: 0, alias: 'Nando' }, { seat: 1, alias: 'Suki' },
                 { seat: 2, alias: 'Tato' }, { seat: 3, alias: 'Vivi' }
@@ -1064,7 +1092,7 @@
               handWins: { Nando: 2, Suki: 1, Tato: 0, Vivi: 1 }
             },
             {
-              code: 'TORN1C', status: 'playing',
+              code: 'TORN1C', status: 'playing', watch: true,
               players: [
                 { seat: 0, alias: 'Pepe' }, { seat: 1, alias: 'Mona' },
                 { seat: 2, alias: 'Rulo' }, { seat: 3, alias: 'Cuca' }
@@ -1082,7 +1110,7 @@
             {
               // Not finished by design: the demo fixture must never crown
               // the plaque or alter La Pared.
-              code: 'TORNFIN', status: 'playing',
+              code: 'TORNFIN', status: 'playing', watch: true,
               players: [
                 { seat: 0, alias: 'El Zurdo' }, { seat: 1, alias: 'Yoel' },
                 { seat: 2, alias: 'Kimbo' }, { seat: 3, alias: 'La Fiera' }
